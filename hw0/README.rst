@@ -2,7 +2,7 @@
 Homework assignment #0
 ======================
 
-This is a demonstration of NSD 20AU homework.
+This is a demonstration of NSD 21SP homework.
 
 To turn in your homework, you need **a PR** and **an E3 entry for the PR URL**.
 
@@ -10,9 +10,9 @@ Your PR needs to be created against the ``hw0`` branch.  (Not ``master``!)  The
 name of your branch needs to start with ``<github-user-name>-hw#``, e.g.,
 ``username-hw2-attempt1``.  You need to create a sub-directory using exactly
 your GitHub username as your working directory
-(``nsdhw_20au/hw0/$github-user-name/``).  The hierarchy should be::
+(``nsdhw_21sp/hw0/$github-user-name/``).  The hierarchy should be::
 
-  - nsdhw_20au (<- repository root)
+  - nsdhw_21sp (<- repository root)
     - hw0
       - username (<- your working directory)
         - Your files
@@ -43,7 +43,7 @@ run the following commands:
 
 .. code-block:: bash
 
-  cd nsdhw_20au/hw0/username
+  cd nsdhw_21sp/hw0/username
   ../validate.py | grep "GET POINT"
 
 .. vim: set ft=rst ff=unix fenc=utf8 et sw=2 ts=2 sts=2:
