@@ -18,7 +18,7 @@ directory.  You may not touch anything else.  Failure to follow may cost you
 points.
 
 Please make sure your PR passes the Github Action CI, and is compatible with
-the latest NSD AMI on AWS (it uses Ubuntu 18.04 LTS) in ``us-east-1``.  You are
+the latest NSD AMI on AWS (it uses Ubuntu 20.04 LTS) in ``us-east-1``.  You are
 not required to use the AMI for doing the homework, but the grader is.  If your
 code fails to build or run on it, **you can lose all points**.
 
