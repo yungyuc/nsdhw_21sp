@@ -19,7 +19,7 @@ def countline():
         else:
             sys.stdout.write('{} not found\n'.format(fname))
 
-# get variable $PYTHON_BIN
+# get the variable $PYTHON_BIN
 PYTHON_BIN = os.environ.get('PYTHON_BIN')
 PYTHON_BIN = str(PYTHON_BIN)
 
