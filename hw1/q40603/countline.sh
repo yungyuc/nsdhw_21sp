@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 if [ $# -eq 1  ]; then
     if [ -e $1 ]; then
         lines=$(cat "$1" | wc -l)
