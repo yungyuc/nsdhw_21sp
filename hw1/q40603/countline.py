@@ -1,8 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env bash
+"exec" "${PYTHON_BIN:=python}" "$0" "$1"
 
 import sys
 import os.path
 
+# print(os.environ['PYTHON_BIN'])
 
 if len(sys.argv) < 2:
     sys.stdout.write('missing file name\n')
