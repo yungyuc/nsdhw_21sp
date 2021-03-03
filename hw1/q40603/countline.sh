@@ -1,6 +1,7 @@
+#!/usr/bin/env bash
 if [ $# -eq 1  ]; then
     if [ -e $1 ]; then
-        lines=$(awk 'END{print NR}' "$1")
+        lines=$(cat "$1" | wc -l)
         echo "$lines lines in $1";
     else
         echo "$1 not found"
