@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 "exec" "${PYTHON_BIN:=python}" "$0" "$1"
 
+
 import sys
 import os.path
 
