@@ -1,13 +1,16 @@
-#!/bin/bash
-if [ $# -eq 1  ]; then
-    if [ -e $1 ]; then
-        lines=$(cat "$1" | wc -l)
-        echo "$lines lines in $1";
-    else
-        echo "$1 not found"
-    fi
-elif [ $# -eq 0 ]; then
-    echo "missing file name";
+#!/usr/bin/env bash
+
+if [[ $"$#" -lt 1 ]]; then
+     echo 'missing file name'
+
+elif [[ $"$#" -gt 1 ]]; then
+     echo 'only one argument is allowed'
 else
-    echo "only one argument is allowed";
-fi
+     filename=$1
+
+     if [[ -f $filename ]]; then
+         echo "$(wc -l $filename) lines in $filename"
+     else
+         echo "$filename not found"
+     fi
+ fi
