@@ -1,6 +1,5 @@
 #!/bin/bash
 """":
-echo $PYTHON_BIN
 if [ "$PYTHON_BIN" != "python2" ] && [ "$PYTHON_BIN" != "python3" ]; then
     echo exec: $PYTHON_BIN: not found
     exit 1
