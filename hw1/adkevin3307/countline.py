@@ -5,7 +5,6 @@ if [[ -x $(command -v $PYTHON_BIN) ]]; then
     exec $PYTHON_BIN $0 $@
 else
     echo exec: $PYTHON_BIN: not found
-
     exit 1
 fi
 ":"""
