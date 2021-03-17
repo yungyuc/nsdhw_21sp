@@ -1,5 +1,4 @@
 #include "line.hpp"
-
 #include <algorithm>
 #include <cstdint>
 #include <utility>

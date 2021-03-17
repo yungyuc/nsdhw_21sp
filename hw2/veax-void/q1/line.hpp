@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 class Line{
@@ -21,7 +22,6 @@ public:
     float y(size_t it) const {return coords.at(it*2+1);}
     float & x(size_t it) {return coords.at(it*2 );}
     float & y(size_t it) {return coords.at(it*2+1);}
-
 private:
     vector<float> coords;
 };
