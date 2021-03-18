@@ -3,12 +3,17 @@
 
 namespace py = pybind11;
 
+bool cmpf(float A, float B, float epsilon = 0.005f)
+{
+    return (fabs(A - B) < epsilon);
+}
+
 
 float _angle(std::pair<float, float> v1, std::pair<float, float> v2){
 
-    if ((v1.first - v1.second) == 0)
+    if (cmpf(v1.first, 0.0f) && cmpf(v1.second, 0.0f))
         throw std::invalid_argument("1st vector length : 0");
-    if ((v2.first - v2.second) == 0)
+    if (cmpf(v2.first, 0.0f) && cmpf(v2.second, 0.0f))
         throw std::invalid_argument("2nd vector length : 0");
     
     float l_v1 = sqrt( pow(v1.first, 2) + pow(v1.second, 2) );
