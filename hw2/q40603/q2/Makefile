@@ -6,8 +6,10 @@ PYSUFFIX:=`python3-config --extension-suffix`
 
 .PHONY: test clean
 
-test: cartesiaon.cpp
+_vector: _vector.cpp
 	$(CXX) $(CXXFLAGS) $(PYINCLUDE) $(PYIEXTERN) $< -o $@$(PYSUFFIX)
+
+test: _vector
 
 clean:
 	rm -f *.so
