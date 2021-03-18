@@ -1,9 +1,11 @@
 CXX = g++
-cflag = -Wall -Wextra -Werror
+FLAGS = -O3 -Wall -shared -std=c++11 -fPIC
+PYBUILD = `python3 -m pybind11 --includes`
+PYSUFFIX = `python3-config --extension-suffix`
 
 .PHONY: package
 package: package.cpp
-	$(CXX) -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` $< -o $@`python3-config --extension-suffix`
+	$(CXX) $(FLAGS) $(PYBUILD)  $< -o $@$(PYSUFFIX)
 
 .PHONY: clean
 clean: 
