@@ -10,6 +10,7 @@ _vector: _vector.cpp
 	$(CXX) $(CXXFLAGS) $(PYINCLUDE) $(PYIEXTERN) $< -o $@$(PYSUFFIX)
 
 test: _vector
+	python3 -m pytest -v
 
 clean:
-	rm -f *.so
+	rm -r -f *.so __pycache__ .pytest*
