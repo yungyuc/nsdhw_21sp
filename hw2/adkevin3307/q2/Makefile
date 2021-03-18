@@ -1,4 +1,4 @@
-TRASH = __pycache__
+TRASH = __pycache__ .pytest*
 
 TEST_FILE = $(wildcard test_*.py)
 
@@ -14,7 +14,7 @@ $(OBJS): $(SOURCES)
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 test:
-	pytest -q $(TEST_FILE)
+	python3 -m pytest -q $(TEST_FILE)
 
 clean:
 	rm -rf $(OBJS) $(TRASH)
