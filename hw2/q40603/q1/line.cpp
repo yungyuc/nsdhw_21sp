@@ -12,6 +12,7 @@ public:
         m_size = l1.m_size;
         m_x.assign(l1.m_x.begin(), l1.m_x.end());
         m_y.assign(l1.m_y.begin(), l1.m_y.end());
+        return *this;
     };
     Line & operator=(Line && l1) {
         if (this == &l1) { return *this; }
