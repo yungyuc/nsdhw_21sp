@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
 import unittest
-from package import cartesian_angle
+from _vector import cartesian_angle
 import math
 
 class pytest(unittest.TestCase):

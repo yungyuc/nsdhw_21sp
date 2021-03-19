@@ -23,6 +23,6 @@ float cartesian_angle(std::array<float, 2> vec1, std::array<float, 2> vec2)
         return acos(a);
 }
 
-PYBIND11_MODULE(package, m) {
+PYBIND11_MODULE(_vector, m) {
     m.def("cartesian_angle", &cartesian_angle, "Calculates the angle (in radians) between two vectors in the 2-dimensional Cartesian coordinate system.");
 } 
