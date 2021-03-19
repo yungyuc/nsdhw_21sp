@@ -1,6 +1,6 @@
 CXX = g++
 FLAGS = -O3 -Wall -shared -std=c++11 -fPIC
-PYBUILD = `python3 -m pybind11 --includes`
+PYBUILD = `python3-config --includes` -Iextern/pybind11/include
 PYSUFFIX = `python3-config --extension-suffix`
 
 .PHONY: package
