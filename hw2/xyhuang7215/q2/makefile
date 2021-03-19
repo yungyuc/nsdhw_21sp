@@ -1,4 +1,4 @@
-PYBIND:=`python3 -m pybind11 --includes`
+PYBIND:=`python3-config --includes`
 SO:=`python3-config --extension-suffix`
 
 _vector: _vector.cpp
