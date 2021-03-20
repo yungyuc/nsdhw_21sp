@@ -3,6 +3,6 @@ all: line_exec.cpp
 run: exec
 	./exec
 check: exec
-	./exec > output.txt
+	./exec > result.txt
 clean:
-	rm ./exec output.txt
+	rm ./exec result.txt

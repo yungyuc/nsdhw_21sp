@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 
 class Line {
 private:
@@ -11,26 +10,6 @@ private:
 	};
 	std::vector<Coord> pts;
 	
-	float dot_product(size_t idx1, size_t idx2) {
-		return (pts[idx1].x * pts[idx2].x) + 
-			   (pts[idx1].y * pts[idx2].y);
-	}
-
-	float cal_length(size_t idx) {
-		const auto x_square = std::pow(pts[idx].x, 2);
-		const auto y_square = std::pow(pts[idx].y, 2);
-
-		return std::sqrt(x_square + y_square);
-	}
-
-	float cal_angle(size_t idx1, size_t idx2) {
-		auto res_product = dot_product(idx1, idx2);
-		auto len1 = cal_length(idx1);
-		auto len2 = cal_length(idx2);
-		
-		return res_product / (len1 * len2);
-	}
-
 public:
 	Line() {}
 
