@@ -4,7 +4,7 @@ SRC=_vector.cpp
 EXE=_vector$(shell python3-config --extension-suffix)
 
 all: ${SRC}
-	${CPP} -std=${VERSION} -O3 -Wall -shared -fPIC $(shell python3 -m pybind11 --includes) ${SRC} -o ${EXE}
+	${CPP} -std=${VERSION} -O3 -Wall -shared -fPIC $(shell python3-config --includes) -Iextern/pybind11/include ${SRC} -o ${EXE}
 
 test:
 	pytest
