@@ -1,45 +1,64 @@
-===========================
-Proposal for [project name]
+Proposal for Pairs Trading 
 ===========================
 
-This is a template for a proposal that specifies what your project is and the
-execution plan.  You are encouraged to use `reStructuredText
-<https://docutils.sourceforge.io/rst.html>`__ (which is employed by this
-template).  The plain-text format makes it easier for the instructor to comment
-in your GitHub pull requests.  You may use another document format if it is
-more suitable to your project.
+A pairs trade is a trading strategy that involves matching a long position with a short position in two stocks with a high correlation. It uses statistical and technical analysis to seek out potential market-neutral profits.
+
+In this term project, I would like to optmize the Pairs Trading computing engine developed by the classmate in my lab. He combined the pairs trading techinque with Taiwan Stock Market intraday high-frequency trading, whcih I think is an opportunity and is suitalbe for NSD term project.
 
 Basic information
 =================
 
-The GitHub repository (URL) hosting your term project.
+Pairs Trading always comes along with a term "Cointegration". The basic ideas of Cointegration is to test whether two time series move similarly. When applied to stock market, we can find two assets that move with cointegration, assign different weight at the assets respectively, and sell the high priced stock, buy the low priced stock. 
 
-Here before everything, you may write a simple statement (preferably one
-sentence) to introduce the project.
+| two stock series | Coinegration series |
+| -------- | -------- |
+| ![](https://i.imgur.com/ajKsdUc.png)     | ![](https://i.imgur.com/2cPbJ7F.png)    |
+
+
+By using this strategy, we can gain the profit in both bear market and bull market. However, trading the assets too frequesntly may suffers from the huge trading cost.  
+
+
+
+
+
+
+
 
 Problem to solve
 ================
 
-Describe the problem you want to solve.  Include necessary background
-information without making it a technical paper.
+### Prerequiement
 
-Some points may help you organize the problem description:
+* For each trading day ( 交易日 ), we can trade the stock from 9:00 ~ 13:30
+* To test whether two stock price has cointegration, we must collect sufficient data to do cointegration test.
+* We choose the top 150 company stock price as our input data.
+* Some of the stock suffers from bad liquidity, which means there exists empty value in our data. So we compute the average price within each minute, and backfill the data with empty value.
+* We collect the data between 9:16 ~ 11:46 to do cointegration test
+* Trade the stock from 11:46~13:30
 
-1. The field or industry of the problem.
-2. The physics and/or the mathematics behind the problem.
-3. The algorithm or numerical method that should be applied for solving the
-   problem.
+The original version of the Pairs Trading computing engine is written in Python, and it takes about 2 minutes to do the computing:
+* We have to test every two stock of top 150 company (11175 combinations)
+
+### Math Part
+
+待補
+
+### What I want to imporve
+
+* The structure of the code
+* CI procedure
+* The computaion speed
+
+
 
 Perspective users
 =================
 
-Describe the users of your software and how they will use it.
-
-This section may be combined with the previous one (`Problem to solve`_).  It
-should use a subsection.
+Trader or the students under department of Finance.
 
 System architecture
 ===================
+(TBD)
 
 Analyze how your system takes input, produces results, and performs any other
 operations.
@@ -51,7 +70,7 @@ Specify the constraints assume in your system.  Describe how it is modularized.
 
 API description
 ===============
-
+(TBD)
 Show how a user programmatically uses your system.  You are supposed to
 implement the system using both C++ and Python.  Describe how a user writes a
 script in the system.  If you provide API in both C++ and Python, describe
@@ -59,7 +78,7 @@ both.
 
 Engineering infrastructure
 ==========================
-
+(TBD)
 Describe how you plan to put together the build system, testing framework, and
 documentation.  Show how you will do version control.
 
@@ -68,7 +87,7 @@ describe how it works in your code development.
 
 Schedule
 ========
-
+(TBD)
 Itemize the work to do and list the work items in a timeline.  Estimate the
 efforts of each item.
 
