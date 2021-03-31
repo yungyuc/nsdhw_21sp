@@ -3,38 +3,14 @@
 #include <random>
 #include <functional>
 #include <ctime>
+#include <utility>
+#include <sstream>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include "Matrix.h"
 
 using namespace std;
-
-void initialize(Matrix<int>& m)
-{
-    random_device device;
-    mt19937 generator(device());
-    uniform_int_distribution<int> distribution(-10, 10);
-    auto random = std::bind(distribution, generator);
-
-    for (size_t i = 0; i < m.rows(); i++) {
-        for (size_t j = 0; j < m.cols(); j++) {
-            m(i, j) = random();
-        }
-    }
-}
-
-void initialize(Matrix<float>& m)
-{
-    random_device device;
-    mt19937 generator(device());
-    uniform_real_distribution<float> distribution(-10, 10);
-    auto random = std::bind(distribution, generator);
-
-    for (size_t i = 0; i < m.rows(); i++) {
-        for (size_t j = 0; j < m.cols(); j++) {
-            m(i, j) = random();
-        }
-    }
-}
 
 template<typename T>
 Matrix<T> multiply_naive(Matrix<T>& m1, Matrix<T>& m2)
@@ -58,8 +34,8 @@ Matrix<T> multiply_naive(Matrix<T>& m1, Matrix<T>& m2)
     return m3;
 }
 
-template<typename T, size_t size>
-Matrix<T> multiply_tile(Matrix<T>& m1, Matrix<T>& m2)
+template<typename T>
+Matrix<T> multiply_tile(Matrix<T>& m1, Matrix<T>& m2, size_t size)
 {
     assert(m1.cols() == m2.rows());
 
@@ -102,54 +78,26 @@ Matrix<T> multiply_mkl(Matrix<T>& m1, Matrix<T>& m2)
 {
 }
 
-int main()
+PYBIND11_MODULE(_matrix, m)
 {
-    Matrix<int> m1(1000, 1000);
-    Matrix<int> m2(1000, 1000);
+    pybind11::class_<Matrix<int>>(m, "Matrix")
+        .def(pybind11::init<size_t, size_t>())
+        .def("__getitem__", [](Matrix<int>& m, pair<size_t, size_t> index) {
+            return m(index.first, index.second);
+        })
+        .def("__setitem__", [](Matrix<int>& m, pair<size_t, size_t> index, int value) {
+            m(index.first, index.second) = value;
+        })
+        .def("__str__", [](Matrix<int>& m) {
+            stringstream ss;
+            ss << m;
 
-    initialize(m1);
-    initialize(m2);
+            return ss.str();
+        })
+        .def("rows", &Matrix<int>::rows)
+        .def("cols", &Matrix<int>::cols);
 
-    // cout << m1 << '\n';
-    // cout << m2 << '\n';
-
-    clock_t start, stop;
-
-    start = clock();
-    Matrix<int> m3_naive = multiply_naive<int>(m1, m2);
-    stop = clock();
-    cout << "naive: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_2 = multiply_tile<int, 2>(m1, m2);
-    stop = clock();
-    cout << "tile 2: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_4 = multiply_tile<int, 4>(m1, m2);
-    stop = clock();
-    cout << "tile 4: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_8 = multiply_tile<int, 8>(m1, m2);
-    stop = clock();
-    cout << "tile 8: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_16 = multiply_tile<int, 16>(m1, m2);
-    stop = clock();
-    cout << "tile 16: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_32 = multiply_tile<int, 32>(m1, m2);
-    stop = clock();
-    cout << "tile 32: " << (stop - start) << '\n';
-
-    start = clock();
-    Matrix<int> m3_tile_64 = multiply_tile<int, 64>(m1, m2);
-    stop = clock();
-    cout << "tile 64: " << (stop - start) << '\n';
-
-    // cout << m3_naive << '\n';
-    // cout << m3_tile << '\n';
+    m.def("multiply_naive", multiply_naive<int>, "Matrix multiply with naive method.");
+    m.def("multiply_tile", multiply_tile<int>, "Matrix multiply with tile method.");
+    // m.def("multiply_mkl", &multiply_mkl, "Matrix multiply with mkl method.");
 }
