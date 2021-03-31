@@ -8,7 +8,7 @@ template<typename T>
 class Matrix {
 private:
     size_t m_rows, m_cols;
-    std::vector<std::vector<T>> m_matrix;
+    std::vector<T> m_matrix;
 
 public:
     Matrix()
@@ -19,7 +19,7 @@ public:
     Matrix(size_t rows, size_t cols)
         : m_rows(rows), m_cols(cols)
     {
-        this->m_matrix.resize(rows, std::vector<T>(cols, 0));
+        this->m_matrix.resize(this->m_rows * this->m_cols, 0);
     }
 
     Matrix(Matrix const& rhs)
@@ -38,11 +38,6 @@ public:
 
     ~Matrix()
     {
-        for (size_t i = 0; i < this->m_matrix.size(); i++) {
-            this->m_matrix[i].clear();
-            this->m_matrix[i].shrink_to_fit();
-        }
-
         this->m_matrix.clear();
         this->m_matrix.shrink_to_fit();
     }
@@ -52,6 +47,8 @@ public:
         this->m_rows = rhs.m_rows;
         this->m_cols = rhs.m_cols;
         this->m_matrix = rhs.m_matrix;
+
+        return *this;
     }
 
     Matrix& operator=(Matrix&& rhs)
@@ -59,24 +56,44 @@ public:
         this->m_rows = rhs.m_rows;
         this->m_cols = rhs.m_cols;
         this->m_matrix = rhs.m_matrix;
+
+        return *this;
+    }
+
+    T const& operator()(size_t i, size_t j) const
+    {
+        return this->m_matrix[i * this->m_cols +j];
     }
 
     T& operator()(size_t i, size_t j)
     {
-        return this->m_matrix[i][j];
+        return this->m_matrix[i * this->m_cols + j];
     }
 
-    const size_t rows()
+    bool operator==(const Matrix& rhs) const
+    {
+        return this->m_matrix == rhs.m_matrix;
+
+        bool result = true;
+
+        for (size_t i = 0; i < this->m_rows; i++) {
+            result = result && (this->m_matrix[i] == rhs.m_matrix[i]);
+        }
+
+        return result;
+    }
+
+    const size_t rows() const
     {
         return this->m_rows;
     }
 
-    const size_t cols()
+    const size_t cols() const
     {
         return this->m_cols;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, Matrix<T>& matrix)
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix)
     {
         for (size_t i = 0; i < matrix.rows(); i++) {
             for (size_t j = 0; j < matrix.cols(); j++) {

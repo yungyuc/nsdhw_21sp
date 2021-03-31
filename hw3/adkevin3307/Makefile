@@ -1,6 +1,9 @@
 EXE = _matrix$(shell python3-config --extension-suffix)
 OBJ_DIR = obj
-TRASH = .cache
+
+TEST_FILE = $(wildcard test_*.py)
+
+TRASH = .cache __pycache__ .pytest_cache performance.txt
 
 SOURCES = $(wildcard *.cpp)
 OBJS = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
@@ -20,6 +23,9 @@ $(OBJ_DIR)/%.o: %.cpp
 
 $(EXE): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
+
+test: all
+	python3 -m pytest -q $(TEST_FILE)
 
 clean:
 	rm -rf $(EXE) $(OBJ_DIR) $(TRASH)

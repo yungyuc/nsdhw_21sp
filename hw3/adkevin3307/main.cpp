@@ -1,19 +1,15 @@
-#include <iostream>
 #include <cassert>
-#include <random>
-#include <functional>
-#include <ctime>
 #include <utility>
 #include <sstream>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#include <pybind11/operators.h>
 
 #include "Matrix.h"
 
 using namespace std;
 
 template<typename T>
-Matrix<T> multiply_naive(Matrix<T>& m1, Matrix<T>& m2)
+Matrix<T> multiply_naive(const Matrix<T>& m1, const Matrix<T>& m2)
 {
     assert(m1.cols() == m2.rows());
 
@@ -35,34 +31,57 @@ Matrix<T> multiply_naive(Matrix<T>& m1, Matrix<T>& m2)
 }
 
 template<typename T>
-Matrix<T> multiply_tile(Matrix<T>& m1, Matrix<T>& m2, size_t size)
+Matrix<T> multiply_tile(const Matrix<T>& m1, const Matrix<T>& m2, size_t size)
 {
     assert(m1.cols() == m2.rows());
 
     Matrix<T> m3(m1.rows(), m2.cols());
 
-    size_t tile_rows = m1.rows() / size;
-    size_t tile_cols = m2.cols() / size;
-    size_t tile_inners = m1.cols() / size;
+    size_t tile_rows = m1.rows() / size + (m1.rows() % size == 0 ? 0 : 1);
+    size_t tile_cols = m2.cols() / size + (m2.cols() % size == 0 ? 0 : 1);
+    size_t tile_inners = m1.cols() / size + (m1.cols() % size == 0 ? 0 : 1);
 
     Matrix<T> tile_m1(size, size);
     Matrix<T> tile_m2(size, size);
-    Matrix<T> tile_m3(size, size);
 
     for (size_t row = 0; row < tile_rows; row++) {
         for (size_t col = 0; col < tile_cols; col++) {
             for (size_t inner = 0; inner < tile_inners; inner++) {
+                // copy
                 for (size_t i = 0; i < size; i++) {
                     for (size_t j = 0; j < size; j++) {
-                        tile_m1(i, j) = m1(row * size + i, inner * size + j);
-                        tile_m2(i, j) = m2(inner * size + j, col * size + i);
+                        size_t index_row = row * size + i;
+                        size_t index_col = col * size + i;
+                        size_t index_inner = inner * size + j;
+
+                        if (index_row < m1.rows() && index_inner < m1.cols()) {
+                            tile_m1(i, j) = m1(index_row, index_inner);
+                        }
+                        else {
+                            tile_m1(i, j) = 0;
+                        }
+
+                        if (index_inner < m2.rows() && index_col < m2.cols()) {
+                            tile_m2(i, j) = m2(index_inner, index_col);
+                        }
+                        else {
+                            tile_m2(i, j) = 0;
+                        }
                     }
                 }
-
+                // calculate
                 for (size_t i = 0; i < size; i++) {
                     for (size_t j = 0; j < size; j++) {
-                        for (size_t k = 0; k < size; k++) {
-                            m3(row * size + i, col * size + j) += tile_m1(i, k) * tile_m2(j, k);
+                        T tile_m3 = 0;
+                        size_t index_row = row * size + i;
+                        size_t index_col = col * size + j;
+
+                        if (index_row < m3.rows() && index_col < m3.cols()) {
+                            for (size_t k = 0; k < size; k++) {
+                                tile_m3 += tile_m1(i, k) * tile_m2(j, k);
+                            }
+
+                            m3(index_row, index_col) += tile_m3;
                         }
                     }
                 }
@@ -76,28 +95,36 @@ Matrix<T> multiply_tile(Matrix<T>& m1, Matrix<T>& m2, size_t size)
 template<typename T>
 Matrix<T> multiply_mkl(Matrix<T>& m1, Matrix<T>& m2)
 {
+    assert(m1.cols() == m2.rows());
+
+    Matrix<T> m3(m1.rows(), m2.cols());
+    
+    m3 = multiply_naive<T>(m1, m2);
+
+    return m3;
 }
 
 PYBIND11_MODULE(_matrix, m)
 {
-    pybind11::class_<Matrix<int>>(m, "Matrix")
+    pybind11::class_<Matrix<double>>(m, "Matrix")
         .def(pybind11::init<size_t, size_t>())
-        .def("__getitem__", [](Matrix<int>& m, pair<size_t, size_t> index) {
+        .def("__getitem__", [](Matrix<double>& m, pair<size_t, size_t> index) {
             return m(index.first, index.second);
         })
-        .def("__setitem__", [](Matrix<int>& m, pair<size_t, size_t> index, int value) {
+        .def("__setitem__", [](Matrix<double>& m, pair<size_t, size_t> index, double value) {
             m(index.first, index.second) = value;
         })
-        .def("__str__", [](Matrix<int>& m) {
+        .def("__str__", [](Matrix<double>& m) {
             stringstream ss;
             ss << m;
 
             return ss.str();
         })
-        .def("rows", &Matrix<int>::rows)
-        .def("cols", &Matrix<int>::cols);
+        .def(pybind11::self == pybind11::self)
+        .def_property_readonly("nrow", &Matrix<double>::rows)
+        .def_property_readonly("ncol", &Matrix<double>::cols);
 
-    m.def("multiply_naive", multiply_naive<int>, "Matrix multiply with naive method.");
-    m.def("multiply_tile", multiply_tile<int>, "Matrix multiply with tile method.");
-    // m.def("multiply_mkl", &multiply_mkl, "Matrix multiply with mkl method.");
+    m.def("multiply_naive", multiply_naive<double>, "Matrix multiply with naive method.");
+    m.def("multiply_tile", multiply_tile<double>, "Matrix multiply with tile method.");
+    m.def("multiply_mkl", multiply_mkl<double>, "Matrix multiply with mkl method.");
 }
