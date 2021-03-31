@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vector>
-#include <type_traits>
 
 template<typename T>
 class Matrix {
@@ -73,14 +72,6 @@ public:
     bool operator==(const Matrix& rhs) const
     {
         return this->m_matrix == rhs.m_matrix;
-
-        bool result = true;
-
-        for (size_t i = 0; i < this->m_rows; i++) {
-            result = result && (this->m_matrix[i] == rhs.m_matrix[i]);
-        }
-
-        return result;
     }
 
     const size_t rows() const
