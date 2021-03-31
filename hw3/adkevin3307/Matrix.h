@@ -80,8 +80,10 @@ public:
     {
         for (size_t i = 0; i < matrix.rows(); i++) {
             for (size_t j = 0; j < matrix.cols(); j++) {
-                os << matrix(i, j) << (j == matrix.cols() - 1 ? '\n' : ' ');
+                os << matrix(i, j) << (j == matrix.cols() - 1 ? "" : " ");
             }
+
+            if (i < matrix.rows() - 1) os << '\n';
         }
 
         return os;
