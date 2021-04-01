@@ -69,6 +69,16 @@ public:
         return this->m_matrix[i * this->m_cols + j];
     }
 
+    const T* data() const
+    {
+        return &(this->m_matrix[0]);
+    }
+
+    T* data()
+    {
+        return &(this->m_matrix[0]);
+    }
+
     bool operator==(const Matrix& rhs) const
     {
         return this->m_matrix == rhs.m_matrix;
