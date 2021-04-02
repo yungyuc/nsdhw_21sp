@@ -2,9 +2,11 @@
 #include <iomanip>
 #include <vector>
 #include <stdexcept>
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+#include "mkl.h"
 
 namespace py = pybind11;
 
@@ -150,6 +152,7 @@ public:
     size_t ncol() const { return m_ncol; }
 
     size_t size() const { return m_nrow * m_ncol; }
+    double *data() const { return m_buffer; }
     double buffer(size_t i) const { return m_buffer[i]; }
     std::vector<double> buffer_vector() const { return std::vector<double>(m_buffer, m_buffer+size()); }
 
@@ -255,11 +258,24 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tile_size) {
     return ret;
 }
 
+Matrix multiply_mkl(Matrix const &mat1, Matrix const &mat2) {
+    Matrix ret = Matrix(mat1.nrow(), mat2.ncol());
+
+    cblas_dgemm(
+        CblasColMajor, CblasNoTrans, CblasNoTrans, 
+        mat1.nrow(), mat2.ncol(), mat1.ncol(), 
+        1.0, mat1.data(), mat1.ncol(), mat2.data(), mat2.ncol(), 
+        0, ret.data(), mat2.ncol());
+
+    return ret;
+}
+
 
 PYBIND11_MODULE(_matrix, m) {
     m.doc() = "matrix mutiplication module";
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);
+    m.def("multiply_mkl", &multiply_mkl);
 
     py::class_<Matrix>(m, "Matrix", py::buffer_protocol())        
         .def(py::init<size_t, size_t>())
