@@ -121,19 +121,27 @@ Matrix multiple_tile(Matrix& ma, Matrix& mb, size_t tsize) {
 	return res;
 }
 
-Matrix multiply_mkl(Matrix& ma, Matrix& mb) {
-	if (ma.ncol() != mb.nrow()) {
+Matrix multiply_mkl(Matrix& A, Matrix& B) {
+	if (A.ncol() != B.nrow()) {
 		throw pybind11::value_error("Given matrices cannot be multiplied");
 	}
 
-	double C[ma.nrow() * mb.ncol()];
+	// double* A = new double[ma.nrow() * ma.ncol()];
+	// double* B = new double[mb.nrow() * mb.ncol()];
+	double* C = new double[A.nrow() * B.ncol()];
 
-	cblas_dgemm(
-		CblasRowMajor, CblasNoTrans, CblasNoTrans, ma.nrow(), mb.ncol(), ma.ncol(), 1.0, ma.data(),
-		ma.nrow(), mb.data(), ma.ncol(), 0.0, C, ma.nrow());
+	int m = A.nrow();
+	int k = A.ncol();
+	int n = B.ncol();
+	double alpha = 1.0, beta = 0.0;
 
-	Matrix res(ma.nrow(), mb.ncol());
+	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
+				m, n, k, alpha, A.data(), k, B.data(), n, beta, C, n);
+
+	Matrix res(A.nrow(), B.ncol());
 	res.load2(C);
+
+	delete[] C;
 
 	return res;
 }

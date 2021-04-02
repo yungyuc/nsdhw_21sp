@@ -38,7 +38,7 @@ def test_check_naive_answer_by_numpy():
             assert(ndot[i, j] == mdot[i, j])
 
 
-def test_check_answer_between_two_method():
+def test_check_answer_between_three_method():
     ma = Matrix(5, 10)
     for i in range(ma.nrow()):
         for j in range(ma.ncol()):
@@ -51,10 +51,16 @@ def test_check_answer_between_two_method():
     print('mb', mb)
 
     dot1 = multiply_naive(ma, mb)
-    dot2 = multiple_tile(ma, mb, 7)
     print('dot1', dot1)
+    dot2 = multiple_tile(ma, mb, 7)
     print('dot2', dot2)
+    dot3 = multiply_mkl(ma, mb)
+    print('dot3', dot3)
 
     for i in range(dot1.nrow()):
         for j in range(dot1.ncol()):
             assert(dot1[i, j] == dot2[i, j])
+
+    for i in range(dot1.nrow()):
+        for j in range(dot1.ncol()):
+            assert(dot1[i, j] == dot3[i, j])
