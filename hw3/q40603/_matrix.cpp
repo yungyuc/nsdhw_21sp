@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <vector>
 #include <stdexcept>
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
 
 class Matrix {
 
@@ -203,6 +206,27 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tile_size) {
                             ret(t_i, t_k) += mat1(t_i, t_j) * mat2(t_j, t_k);
                             
     return ret;
+}
+
+
+PYBIND11_MODULE(_matrix, m) {
+    m.doc() = "matrix mutiplication module";
+    m.def("multiply_naive", &multiply_naive);
+    m.def("multiply_tile", &multiply_tile);
+
+    py::class_<Matrix>(m, "Matrix", py::buffer_protocol())        
+        .def(py::init<size_t, size_t>())
+        .def(py::init<Matrix const &>())
+        .def(py::init<std::vector<std::vector<double>>&>())
+        .def_property_readonly("nrow", &Matrix::nrow, nullptr)
+        .def_property_readonly("ncol", &Matrix::ncol), nullptr
+        .def("__eq__", &Matrix::operator==)
+        .def("__getitem__", [](const Matrix &mat, std::pair<size_t, size_t> i){
+            return mat(i.first, i.second);
+        })
+        .def("__setitem__", [](Matrix &mat, std::pair<size_t, size_t> i, double val){
+            mat(i.first, i.second) = val;
+        });
 }
 
 int main(int argc, char ** argv)
