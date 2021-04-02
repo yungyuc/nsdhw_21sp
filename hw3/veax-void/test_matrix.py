@@ -21,15 +21,15 @@ def calculation_helper(p, q, r, tsize):
     _m1 = _matrix.Matrix(m1)
     _m2 = _matrix.Matrix(m2)
 
-    tstart = time.clock()
+    tstart = time.process_time()
     ret_naive = _matrix.multiply_naive(_m1, _m2)
-    tnaive = time.clock() - tstart
-    tstart = time.clock()
+    tnaive = time.process_time() - tstart
+    tstart = time.process_time()
     ret_tile = _matrix.multiply_tile(_m1, _m2, tsize)
-    ttile = time.clock() - tstart
-    tstart = time.clock()
+    ttile = time.process_time() - tstart
+    tstart = time.process_time()
     ret_mkl = _matrix.multiply_mkl(_m1, _m2)
-    tmkl = time.clock() - tstart
+    tmkl = time.process_time() - tstart
 
     assert m3.shape[0] == ret_naive.nrow and m3.shape[1] == ret_naive.ncol
     assert m3.shape[0] == ret_tile.nrow and m3.shape[1] == ret_tile.ncol
