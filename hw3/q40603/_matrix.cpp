@@ -150,8 +150,10 @@ Matrix operator*(Matrix const & mat1, Matrix const & mat2)
             {
                 v += mat1(i,j) * mat2(j,k);
             }
+            // std::cout<<v<<std::endl;
             ret(i,k) = v;
         }
+        // std::cout<<std::endl;
     }
 
     return ret;
@@ -179,6 +181,30 @@ Matrix multiply_naive(Matrix const &mat1, Matrix const &mat2) {
     return mat1 * mat2;
 }
 
+
+// inline size_t t_edge(size_t n, size_t tile_edge) {
+//     return std::min(n, tile_edge);
+// }
+
+Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tile_size) {
+    if (mat1.ncol() != mat2.nrow()) {
+        throw std::out_of_range("Incorrect dimensions for matrix multiplication");
+    }
+
+    Matrix ret(mat1.nrow(), mat2.ncol());
+    size_t i, j ,k, t_i, t_j, t_k;
+
+    for (i = 0; i < mat1.nrow(); i += tile_size) 
+        for (k = 0; k < mat2.ncol(); k += tile_size) 
+            for (j = 0; j <  mat1.ncol(); j += tile_size) 
+                for (t_j = j; t_j < std::min(j + tile_size, mat1.ncol()); ++t_j) 
+                    for (t_i = i; t_i < std::min(i + tile_size, mat1.nrow()); ++t_i) 
+                        for (t_k = k; t_k < std::min(k + tile_size,mat2.ncol()); ++t_k) 
+                            ret(t_i, t_k) += mat1(t_i, t_j) * mat2(t_j, t_k);
+                            
+    return ret;
+}
+
 int main(int argc, char ** argv)
 {
     std::cout << ">>> A(2x3) times B(3x2):" << std::endl;
@@ -192,7 +218,7 @@ int main(int argc, char ** argv)
     std::cout << "result matrix C (2x2) = AB:" << mat3 << std::endl;
 
     std::cout << ">>> B(3x2) times A(2x3):" << std::endl;
-    Matrix mat4 = multiply_naive(mat2, mat1);
+    Matrix mat4 = multiply_tile(mat2, mat1, 1);
     std::cout << "matrix B (3x2):" << mat2 << std::endl;
     std::cout << "matrix A (2x3):" << mat1 << std::endl;
     std::cout << "result matrix D (3x3) = BA:" << mat4 << std::endl;
