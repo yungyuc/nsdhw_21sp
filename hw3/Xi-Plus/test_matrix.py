@@ -1,6 +1,8 @@
+import timeit
+
+import _matrix
 import numpy as np
 import pytest
-from _matrix import Matrix, multiply_mkl, multiply_naive, multiply_tile
 
 
 def test_check_naive_answer_by_numpy():
@@ -11,7 +13,7 @@ def test_check_naive_answer_by_numpy():
     ])
     print('na', na)
 
-    ma = Matrix(2, 3)
+    ma = _matrix.Matrix(2, 3)
     ma.load(na)
     print('ma', ma)
 
@@ -23,14 +25,14 @@ def test_check_naive_answer_by_numpy():
     ])
     print('nb', nb)
 
-    mb = Matrix(3, 4)
+    mb = _matrix.Matrix(3, 4)
     mb.load(nb)
     print('mb', mb)
 
     # multiply
     ndot = np.dot(na, nb)
     print('ndot', ndot)
-    mdot = multiply_naive(ma, mb)
+    mdot = _matrix.multiply_naive(ma, mb)
     print('mdot', mdot)
 
     for i in range(ndot.shape[0]):
@@ -39,23 +41,50 @@ def test_check_naive_answer_by_numpy():
 
 
 def test_check_answer_between_three_method():
-    ma = Matrix(5, 10)
+    ma = _matrix.Matrix(5, 10)
     for i in range(ma.nrow):
         for j in range(ma.ncol):
             ma[i, j] = i * ma.ncol + j + 1
     print('ma', ma)
-    mb = Matrix(10, 20)
+    mb = _matrix.Matrix(10, 20)
     for i in range(mb.nrow):
         for j in range(mb.ncol):
             mb[i, j] = i * mb.ncol + j + 1
     print('mb', mb)
 
-    dot1 = multiply_naive(ma, mb)
+    dot1 = _matrix.multiply_naive(ma, mb)
     print('dot1', dot1)
-    dot2 = multiply_tile(ma, mb, 7)
+    dot2 = _matrix.multiply_tile(ma, mb, 7)
     print('dot2', dot2)
-    dot3 = multiply_mkl(ma, mb)
+    dot3 = _matrix.multiply_mkl(ma, mb)
     print('dot3', dot3)
 
     assert dot1 == dot2
     assert dot1 == dot3
+
+
+def test_performace():
+    def make_matrices(size1, size2):
+        mat = _matrix.Matrix(size1, size2)
+        for it in range(size1):
+            for jt in range(size2):
+                mat[it, jt] = it * size2 + jt + 1
+        return mat
+
+    mat1 = make_matrices(1000, 1001)
+    mat2 = make_matrices(1001, 1002)
+    tsize = 16
+
+    ns = dict(_matrix=_matrix, mat1=mat1, mat2=mat2, tsize=tsize)
+    t_naive = timeit.Timer('_matrix.multiply_naive(mat1, mat2)', globals=ns)
+    t_tile = timeit.Timer('_matrix.multiply_tile(mat1, mat2, tsize)', globals=ns)
+    t_mkl = timeit.Timer('_matrix.multiply_mkl(mat1, mat2)', globals=ns)
+
+    time_naive = min(t_naive.repeat(5, 1))
+    time_tile = min(t_tile.repeat(5, 1))
+    time_mkl = min(t_mkl.repeat(5, 1))
+
+    with open('performance.txt', 'w', encoding='utf8') as f:
+        f.write('multiply_naive takes {:.3f} seconds\n'.format(time_naive))
+        f.write('multiply_tile takes {:.3f} seconds, {:.3f}% runtime of naive version\n'.format(time_tile, time_tile / time_naive * 100))
+        f.write('multiply_mkl takes {:.3f} seconds, {:.3f}% runtime of naive version\n'.format(time_mkl, time_mkl / time_naive * 100))
