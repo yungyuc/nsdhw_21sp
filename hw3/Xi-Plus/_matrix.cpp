@@ -20,6 +20,7 @@ class Matrix {
 		memset(m_buffer, 0, nrow * ncol * sizeof(double));
 	}
 
+	// TODO: I don’t know why it’s broken
 	// ~Matrix() {
 	// 	delete[] m_buffer;
 	// }
@@ -34,9 +35,6 @@ class Matrix {
 		pybind11::buffer_info buf = input.request();
 
 		memcpy(m_buffer, buf.ptr, nrow * ncol * sizeof(double));
-		// for (size_t i = 0; i < size; i++) {
-		// 	m_buffer[i] = buf[i];
-		// }
 	}
 
 	void load2(double* input) {
@@ -136,8 +134,6 @@ Matrix multiply_mkl(Matrix& A, Matrix& B) {
 		throw pybind11::value_error("Given matrices cannot be multiplied");
 	}
 
-	// double* A = new double[ma.nrow * ma.ncol];
-	// double* B = new double[mb.nrow * mb.ncol];
 	double* C = new double[A.nrow * B.ncol];
 
 	int m = A.nrow;
@@ -145,6 +141,7 @@ Matrix multiply_mkl(Matrix& A, Matrix& B) {
 	int n = B.ncol;
 	double alpha = 1.0, beta = 0.0;
 
+	// Ref: https://software.intel.com/content/www/us/en/develop/documentation/mkl-tutorial-c/top/multiplying-matrices-using-dgemm.html
 	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
 				m, n, k, alpha, A.data(), k, B.data(), n, beta, C, n);
 
