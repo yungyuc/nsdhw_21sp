@@ -10,7 +10,7 @@ import pytest
 def is_close_to_equal(m1, m2, m, n):
     for i in range(m):
         for j in range(n):
-            assert m1[i, j] == approx(m2[i, j])
+            assert m1[i, j] == pytest.approx(m2[i, j])
     return True
 
 def calculation_helper(p, q, r, tsize):
