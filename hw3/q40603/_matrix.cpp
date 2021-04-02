@@ -3,8 +3,16 @@
 #include <vector>
 #include <stdexcept>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 namespace py = pybind11;
+
+bool cmpd(double A, double B, float epsilon = 0.005f)
+{
+    return (fabs(A - B) < epsilon);
+}
+
 
 class Matrix {
 
@@ -91,6 +99,44 @@ public:
         std::swap(m_buffer, other.m_buffer);
         return *this;
     }
+
+    Matrix(std::vector<std::vector<double>> const &v) {
+        m_nrow = v.size();
+        m_ncol = v[0].size();
+        reset_buffer(m_nrow, m_ncol);
+        for (size_t i = 0; i < m_nrow; ++i) {
+            for (size_t j = 0; j < m_ncol; ++j) {
+                (*this)(i,j) = v[i][j];
+            }
+        }
+    }
+
+    bool operator==(Matrix const &other) {
+        if (this == &other) {
+            return true;
+        }
+        if (m_nrow != other.m_nrow || m_ncol != other.m_ncol) {
+            return false;
+        }
+        for (size_t i = 0; i < m_nrow; ++i) {
+            for (size_t j = 0; j < m_ncol; ++j) {
+                if (! cmpd((*this)(i,j), other(i,j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void show(){
+         for (size_t i = 0; i < m_nrow; ++i) {
+            for (size_t j = 0; j < m_ncol; ++j) {
+                std::cout<<std::setprecision(3)<<(*this)(i,j)<<" ";
+            }
+            std::cout<<std::endl;
+        }       
+    }
+
 
     ~Matrix()
     {
@@ -180,6 +226,7 @@ std::ostream & operator << (std::ostream & ostr, Matrix const & mat)
 }
 
 
+
 Matrix multiply_naive(Matrix const &mat1, Matrix const &mat2) {
     return mat1 * mat2;
 }
@@ -218,9 +265,9 @@ PYBIND11_MODULE(_matrix, m) {
         .def(py::init<size_t, size_t>())
         .def(py::init<Matrix const &>())
         .def(py::init<std::vector<std::vector<double>>&>())
-        .def_property_readonly("nrow", &Matrix::nrow, nullptr)
-        .def_property_readonly("ncol", &Matrix::ncol), nullptr
-        .def("__eq__", &Matrix::operator==)
+        .def_property_readonly("nrow", &Matrix::nrow)
+        .def_property_readonly("ncol", &Matrix::ncol)
+        .def("show", &Matrix::show)
         .def("__getitem__", [](const Matrix &mat, std::pair<size_t, size_t> i){
             return mat(i.first, i.second);
         })
@@ -229,23 +276,23 @@ PYBIND11_MODULE(_matrix, m) {
         });
 }
 
-int main(int argc, char ** argv)
-{
-    std::cout << ">>> A(2x3) times B(3x2):" << std::endl;
-    Matrix mat1(2, 3, std::vector<double>{1, 2, 3, 4, 5, 6});
-    Matrix mat2(3, 2, std::vector<double>{1, 2, 3, 4, 5, 6});
+// int main(int argc, char ** argv)
+// {
+//     std::cout << ">>> A(2x3) times B(3x2):" << std::endl;
+//     Matrix mat1(2, 3, std::vector<double>{1, 2, 3, 4, 5, 6});
+//     Matrix mat2(3, 2, std::vector<double>{1, 2, 3, 4, 5, 6});
 
-    Matrix mat3 = multiply_naive(mat1, mat2);
+//     Matrix mat3 = multiply_naive(mat1, mat2);
 
-    std::cout << "matrix A (2x3):" << mat1 << std::endl;
-    std::cout << "matrix B (3x2):" << mat2 << std::endl;
-    std::cout << "result matrix C (2x2) = AB:" << mat3 << std::endl;
+//     std::cout << "matrix A (2x3):" << mat1 << std::endl;
+//     std::cout << "matrix B (3x2):" << mat2 << std::endl;
+//     std::cout << "result matrix C (2x2) = AB:" << mat3 << std::endl;
 
-    std::cout << ">>> B(3x2) times A(2x3):" << std::endl;
-    Matrix mat4 = multiply_tile(mat2, mat1, 1);
-    std::cout << "matrix B (3x2):" << mat2 << std::endl;
-    std::cout << "matrix A (2x3):" << mat1 << std::endl;
-    std::cout << "result matrix D (3x3) = BA:" << mat4 << std::endl;
+//     std::cout << ">>> B(3x2) times A(2x3):" << std::endl;
+//     Matrix mat4 = multiply_tile(mat2, mat1, 1);
+//     std::cout << "matrix B (3x2):" << mat2 << std::endl;
+//     std::cout << "matrix A (2x3):" << mat1 << std::endl;
+//     std::cout << "result matrix D (3x3) = BA:" << mat4 << std::endl;
 
-    return 0;
-}
+//     return 0;
+// }

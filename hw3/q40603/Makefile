@@ -23,22 +23,19 @@ MKLLINKLINE := \
 	${MKLROOT}/lib/libmkl_def.${MKLEXT} \
 	-lpthread -lm -ldl
 
-CXX = g++
-CXXFLAGS := ${CXXFLAGS} \
-	-std=c++17 -O3 -g -m64 \
-	-ftree-vectorize -funroll-loops -ffast-math \
-	-Wall -Wextra -Werror -shared -fPIC \
-	`python3 -m pybind11 --includes` _matrix.cpp \
-	-o _matrix`python3-config --extension-suffix` \
-	-I${MKLROOT}/include\
-	${MKLLINKLINE}
+CXX=g++
+CXXFLAGS=-std=c++11 -shared -O3 -Wall -Wextra -Werror -fPIC  
+PYINCLUDE:=`python3-config --includes`
+PYIEXTERN:=-Iextern/pybind11/include
+PYSUFFIX:=`python3-config --extension-suffix`
+	
 
 .PHONY: module test clean
-module:
-	$(CXX) $(CXXFLAGS)
+_matrix: _matrix.cpp
+	$(CXX) $(CXXFLAGS) $(PYINCLUDE) $(PYIEXTERN) $< -o $@$(PYSUFFIX)
 
 clean:
 	rm -rf *.so __pycache__ .pytest_cache performance.txt
 
-test: module
-	pytest
+test: _matrix
+	python3 -m pytest -v
