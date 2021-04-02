@@ -65,7 +65,7 @@ There are totally 5 points in this homework assignment.
    1. Implement a free function performing naive matrix-matrix multiplication.
       Name it ``multiply_naive()``.
    2. Implement a free function performing matrix-matrix multiplication with
-      tiling.  Name it ``multiple_tile()``.
+      tiling.  Name it ``multiply_tile()``.
    3. Implement a free frunction that uses ``DGEMM`` for the multiplication.
       Name it ``multiply_mkl()``.
 2. Make Python unit tests for the C++ matrix class and multiplication
