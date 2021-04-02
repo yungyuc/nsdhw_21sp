@@ -34,9 +34,9 @@ def calculation_helper(p, q, r, tsize):
     assert m3.shape[0] == ret_naive.nrow and m3.shape[1] == ret_naive.ncol
     assert m3.shape[0] == ret_tile.nrow and m3.shape[1] == ret_tile.ncol
     assert m3.shape[0] == ret_mkl.nrow and m3.shape[1] == ret_mkl.ncol
-    assert(self.is_close_to_equal(m3, ret_naive, p, r))
-    assert(self.is_close_to_equal(m3, ret_tile, p, r))
-    assert(self.is_close_to_equal(m3, ret_mkl, p, r))
+    assert(is_close_to_equal(m3, ret_naive, p, r))
+    assert(is_close_to_equal(m3, ret_tile, p, r))
+    assert(is_close_to_equal(m3, ret_mkl, p, r))
 
     with open('performance.txt', 'w') as f:
         f.write('multiply_naive: {}\n'.format(tnaive))
@@ -45,12 +45,12 @@ def calculation_helper(p, q, r, tsize):
         f.write('tile speed-up over naive: {}\n'.format(tnaive / ttile))
         f.write('MKL speed-up over naive: {}\n'.format(tnaive / tmkl))
 
-def test_1000(self):
-    self.calculation_helper(1000, 1000, 1000, 16)
+def test_1000():
+    calculation_helper(1000, 1000, 1000, 16)
 
-def test_random(self):
+def test_random():
     p = random.randint(1, 1000)
     q = random.randint(1, 1000)
     r = random.randint(1, 1000)
     tsize = random.randint(1, 1000)
-    self.calculation_helper(p, q, r, tsize)
+    calculation_helper(p, q, r, tsize)
