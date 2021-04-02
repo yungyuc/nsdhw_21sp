@@ -1,7 +1,7 @@
 // Ref: https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function
+#include <mkl.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
-#include <mkl_blas.h>
 
 #include <iostream>
 #include <string>
@@ -126,15 +126,11 @@ Matrix multiply_mkl(Matrix& ma, Matrix& mb) {
 		throw pybind11::value_error("Given matrices cannot be multiplied");
 	}
 
-	const int rowsA = ma.nrow();
-	const int common = ma.ncol();
-	const int colsB = mb.ncol();
-	char transA = 'N', transB = 'N';
-	double one = 1.0, zero = 0.0;
-	double C[rowsA * colsB];
+	double C[ma.nrow() * mb.ncol()];
 
-	dgemm(&transA, &transB, &rowsA, &colsB, &common, &one, ma.data(),
-		   &rowsA, mb.data(), &common, &zero, C, &rowsA);
+	cblas_dgemm(
+		CblasRowMajor, CblasNoTrans, CblasNoTrans, ma.nrow(), mb.ncol(), ma.ncol(), 1.0, ma.data(),
+		ma.nrow(), mb.data(), ma.ncol(), 0.0, C, ma.nrow());
 
 	Matrix res(ma.nrow(), mb.ncol());
 	res.load2(C);

@@ -1,5 +1,5 @@
 PYTHON = python3
-BLAS=-I/opt/intel/mkl/include -L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lpthread
+BLAS=-I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
 MATRIX=_matrix$$( $(PYTHON)-config --extension-suffix)
 
 # Ref: https://pybind11.readthedocs.io/en/stable/compiling.html#building-manually
