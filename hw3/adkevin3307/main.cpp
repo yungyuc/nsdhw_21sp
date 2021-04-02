@@ -4,6 +4,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 
+#include "mkl.h"
+
 #include "Matrix.h"
 
 using namespace std;
@@ -98,8 +100,9 @@ Matrix<T> multiply_mkl(Matrix<T>& m1, Matrix<T>& m2)
     assert(m1.cols() == m2.rows());
 
     Matrix<T> m3(m1.rows(), m2.cols());
-    
-    m3 = multiply_naive<T>(m1, m2);
+
+    // m3 = multiply_naive<T>(m1, m2);
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m1.rows(), m2.cols(), m1.cols(), 1, m1.data(), m1.cols(), m2.data(), m2.cols(), 0, m3.data(), m3.cols());
 
     return m3;
 }
