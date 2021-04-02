@@ -107,7 +107,7 @@ def test_performance():
         naive_record.append(time.time() - timer)
 
         timer = time.time()
-        multiply_tile(mat_a, mat_b, 64)
+        multiply_tile(mat_a, mat_b, 16)
         tile_record.append(time.time() - timer)
 
     naive_avg = sum(naive_record) / len(naive_record) 
