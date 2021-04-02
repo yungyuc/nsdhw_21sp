@@ -22,10 +22,10 @@ SOFILE = $(MODULE)$(shell python3-config --extension-suffix)
 all: $(SOFILE)
 
 $(SOFILE): matrix.cc matrix.h
-	$(CXX) `python3 -m pybind11 --includes` $< -o $@ $(CXXFLAGS)
+    $(CXX) `python3 -m pybind11 --includes` $< -o $@ $(CXXFLAGS)
 
 test: $(SOFILE)
-	pytest
+    pytest
 
 clean:
-	@rm -rf $(SOFILE) __pycache__ .pytest_cache performance.txt
+    rm -rf $(SOFILE) __pycache__ .pytest_cache performance.txt
