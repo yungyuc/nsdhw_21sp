@@ -22,17 +22,13 @@ public:
     }
 
     Matrix(Matrix const& rhs)
+        : m_rows(rhs.m_rows), m_cols(rhs.m_cols), m_matrix(rhs.m_matrix)
     {
-        this->m_rows = rhs.m_rows;
-        this->m_cols = rhs.m_cols;
-        this->m_matrix = rhs.m_matrix;
     }
 
     Matrix(Matrix&& rhs)
+        : m_rows(rhs.m_rows), m_cols(rhs.m_cols), m_matrix(std::move(rhs.m_matrix))
     {
-        this->m_rows = rhs.m_rows;
-        this->m_cols = rhs.m_cols;
-        this->m_matrix = rhs.m_matrix;
     }
 
     ~Matrix()
@@ -43,18 +39,22 @@ public:
 
     Matrix& operator=(Matrix const& rhs)
     {
-        this->m_rows = rhs.m_rows;
-        this->m_cols = rhs.m_cols;
-        this->m_matrix = rhs.m_matrix;
+        if (this != &rhs) {
+            this->m_rows = rhs.m_rows;
+            this->m_cols = rhs.m_cols;
+            this->m_matrix = rhs.m_matrix;
+        }
 
         return *this;
     }
 
     Matrix& operator=(Matrix&& rhs)
     {
-        this->m_rows = rhs.m_rows;
-        this->m_cols = rhs.m_cols;
-        this->m_matrix = rhs.m_matrix;
+        if (this != &rhs) {
+            this->m_rows = rhs.m_rows;
+            this->m_cols = rhs.m_cols;
+            this->m_matrix = std::move(rhs.m_matrix);
+        }
 
         return *this;
     }
@@ -79,17 +79,17 @@ public:
         return &(this->m_matrix[0]);
     }
 
-    bool operator==(const Matrix& rhs) const
+    constexpr bool operator==(const Matrix& rhs) const
     {
-        return this->m_matrix == rhs.m_matrix;
+        return (this->m_matrix == rhs.m_matrix);
     }
 
-    const size_t rows() const
+    constexpr size_t rows() const
     {
         return this->m_rows;
     }
 
-    const size_t cols() const
+    constexpr size_t cols() const
     {
         return this->m_cols;
     }
