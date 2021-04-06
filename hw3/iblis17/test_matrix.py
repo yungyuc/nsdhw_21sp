@@ -1,4 +1,7 @@
 import numpy as np
+import os
+import pytest
+import timeit
 
 from _matrix import Matrix, multiply_naive, multiply_mkl, multiply_tile
 
@@ -41,3 +44,33 @@ def test_eq():
     B.from_list([1, 2, 3, 4, -5])
 
     assert A != B
+
+
+@pytest.fixture
+def outfile():
+    fname = os.path.join(os.path.dirname(__file__), 'performance.txt')
+    f = open(fname, 'w')
+    yield f
+    f.close()
+
+
+@pytest.mark.parametrize('size', [1000])
+def test_performance(size, outfile):
+    outfile.write(f'matrix size = {size}x{size}\n')
+
+    A = Matrix(size, size)
+    B = Matrix(size, size)
+    ls = list(range(1, size * size + 1))
+    A.from_list(ls)
+    B.from_list(ls)
+
+    # baseline
+    d = dict(A=A, B=B, f=multiply_naive)
+    t0 = t = min(timeit.repeat('f(A, B)', repeat=5, number=1, globals=d))
+    outfile.write(f'multiply_naive time: {t} sec\n')
+
+    # tiled
+    for T in [8, 16, 32, 64]:
+        d = dict(A=A, B=B, T=T, f=multiply_tile)
+        t = min(timeit.repeat('f(A, B, T)', repeat=5, number=1, globals=d))
+        outfile.write(f'multiply_tile time: {t} sec, speed-up: {t/t0} x\n')
