@@ -15,6 +15,7 @@ venv:
 	$(PIP) install wheel
 	$(PIP) install pybind11==2.6.2
 	$(PIP) install pytest==6.2.2
+	$(PIP) install mkl==2021.1.1
 
 clean:
 	rm -rf venv *.so __pycache__ *.o
