@@ -1,9 +1,12 @@
 #include <algorithm>
+#include <cstring>
 #include <iostream>
 #include <stddef.h>
 #include <string>
+#include <tuple>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
@@ -13,11 +16,11 @@ class Matrix {
 public:
     Matrix(size_t n, size_t m) : _n(n), _m(m)
     {
-        _buf = new double[_n * _m];
+        _buf = new double[_n * _m]();
     }
     Matrix(const Matrix& B) : _n(B._n), _m(B._m) // copy constrcutor
     {
-        _buf = new double[_n * _m];
+        _buf = new double[_n * _m]();
         std::copy(B._buf, B._buf + B._n * B._m, _buf);
     }
     Matrix(Matrix&& B) : _n(B._n), _m(B._m), _buf(B._buf) // move constrcutor
@@ -64,6 +67,39 @@ public:
         return s;
     }
 
+    void check_boundary(size_t i, size_t j) const
+    {
+        if ((i >= _n) || (j >= _m))
+            throw(std::invalid_argument("out of boundary access"));
+    }
+
+    double getitem(std::tuple<size_t, size_t> idx) const
+    {
+        size_t i = std::get<0>(idx);
+        size_t j = std::get<1>(idx);
+
+        check_boundary(i, j);
+        return (*this)(i, j);
+    }
+
+    void setitem(std::tuple<size_t, size_t> idx, double val)
+    {
+        size_t i = std::get<0>(idx);
+        size_t j = std::get<1>(idx);
+
+        check_boundary(i, j);
+        (*this)(i, j) = val;
+    }
+
+    Matrix* from_list(const std::vector<double> &v)
+    {
+        if (v.size() != _n * _m)
+            throw(std::invalid_argument("invalid length"));
+
+        std::memcpy(_buf, v.data(), v.size() * sizeof(double));
+        return this;
+    }
+
 private:
     size_t _n;
     size_t _m;
@@ -96,9 +132,15 @@ PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_naive", &multiply_naive, "");
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())
-        .def("n", &Matrix::n)
-        .def("m", &Matrix::m)
-        .def("val", &Matrix::val)
-        .def("__repr__", &Matrix::repr)
+        .def("n",           &Matrix::n)
+        .def("m",           &Matrix::m)
+        .def("val",         &Matrix::val)
+        .def("from_list",   &Matrix::from_list)
+        .def("__repr__",    &Matrix::repr)
+        .def("__getitem__", &Matrix::getitem)
+        .def("__setitem__", &Matrix::setitem)
+
+        .def_property_readonly("nrow", &Matrix::n)
+        .def_property_readonly("ncol", &Matrix::m)
         ;
 }
