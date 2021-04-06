@@ -6,6 +6,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/operators.h>
 
 namespace py = pybind11;
 
@@ -17,6 +18,7 @@ class Matrix {
         void getTileTrans(Matrix &, int, int);
         void addBlockByTile(const Matrix &, int, int) ;
         Matrix operator+=(const Matrix &);
+        bool operator==(const Matrix &) const;
         std::vector<double> & operator[](int);
 
         void show(){
@@ -76,6 +78,24 @@ Matrix Matrix::operator+=(const Matrix & M){
         for(int j = 0; j < ncol; ++j)
             mat[i][j] += M.mat[i][j];
     return *this;
+}
+
+bool Matrix::operator==(const Matrix & M) const{
+    bool equal = true;
+
+    if(ncol != M.ncol || nrow != M.nrow){
+        equal = false;
+        return equal;
+    }
+
+    for(int i = 0; i < nrow; ++i)
+        for(int j = 0; j < ncol; ++j)
+            if(mat[i][j] != M.mat[i][j]){
+                equal = false;
+                break;
+            }
+
+    return equal;
 }
 
 std::vector<double> & Matrix::operator[](int m){
@@ -183,6 +203,7 @@ PYBIND11_MODULE(_matrix, m) {
         .def(py::init<int, int>())
         .def_readwrite("nrow", &Matrix::nrow)
         .def_readwrite("ncol", &Matrix::ncol)
+        .def(pybind11::self == pybind11::self)
         .def("__getitem__", [](Matrix &m, const int row) {
             return m.mat[row];
         })
