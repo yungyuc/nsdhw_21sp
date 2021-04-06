@@ -42,7 +42,7 @@ Matrix multiply_naive(Matrix const & matrix1, Matrix const & matrix2)
 // Use MKL for the matrix multiplication.
 Matrix multiply_mkl(Matrix const & matrix1, Matrix const & matrix2)
 {
-    mkl_set_num_threads(1);
+    // mkl_set_num_threads(1);
 
     check_validate_mul(matrix1, matrix2);
     Matrix ret(matrix1.nrow(), matrix2.ncol());
