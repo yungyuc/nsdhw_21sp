@@ -1,0 +1,7 @@
+Start multiply_naive (repeat=5), take min = 8.571315700000014 seconds
+Start multiply_tile (blockSize 16) (repeat=5), take min = 6.293866000000008 seconds
+Start multiply_tile (blockSize 32) (repeat=5), take min = 5.522023600000011 seconds
+Start multiply_tile (blockSize 64) (repeat=5), take min = 5.230341199999998 seconds
+tile 16 speed-up over naive: 1.36185 x
+tile 32 speed-up over naive: 1.55221 x
+tile 64 speed-up over naive: 1.63877 x
