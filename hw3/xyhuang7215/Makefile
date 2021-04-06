@@ -9,4 +9,12 @@ test:
 	python -m pytest
 
 clean:
-	rm _matrix$(SO) __pycache__ .pytest_cache -r 
+	if [ -d __pycache__ ]; then \
+		rm __pycache__  -r; \
+	fi
+	if [ -d .pytest_cache ]; then \
+		rm .pytest_cache -r; \
+	fi
+	if [ -f _matrix$(SO) ]; then \
+		rm _matrix$(SO); \
+	fi
