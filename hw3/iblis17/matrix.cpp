@@ -27,7 +27,6 @@ public:
     }
     Matrix(Matrix&& B) : _n(B._n), _m(B._m), _buf(B._buf) // move constrcutor
     {
-        std::cout << "move constructor called" << std::endl;
         B._buf = nullptr; // prevent double-free
     }
     Matrix& operator= (Matrix&& B)
@@ -50,6 +49,9 @@ public:
 
     double  operator() (const size_t i, const size_t j) const { return this->_buf[i*_m + j]; }
     double& operator() (const size_t i, const size_t j)       { return this->_buf[i*_m + j]; }
+    // linear indexing
+    double  operator() (const size_t i) const { return this->_buf[i]; }
+    double& operator() (const size_t i)       { return this->_buf[i]; }
 
     size_t n() const { return _n; }
     size_t m() const { return _m; }
@@ -127,8 +129,39 @@ Matrix multiply_naive(Matrix& A, Matrix& B)
     return C;
 }
 
-Matrix multiply_tile(Matrix& A, Matrix& B)
-{}
+Matrix multiply_tile(Matrix& A, Matrix& B, size_t T)
+{
+    if (A.m() != B.n())
+        throw(std::invalid_argument("invalid shape"));
+
+    Matrix C(A.n(), B.m());
+    const size_t I = C.n();
+    const size_t J = C.m();
+    const size_t K = A.m();
+    size_t i, j, k, x, y, z;
+
+    for (i=0; i<I; i+=T)
+    {
+        const size_t X = std::min(i + T, I);
+        for (j=0; j<J; j+=T)
+        {
+            const size_t Y = std::min(j + T, J);
+            for (k=0; k<K; k+=T)
+            {
+                const size_t Z = std::min(k + T, K);
+                for (x=i; x<X; ++x)
+                    for (y=j; y<Y; ++y)
+                    {
+                        const size_t xy = x * J + y;
+                        for (z=k; z<Z; ++z)
+                            C(xy) += A(x * K + z) * B(z * J + y);
+                    }
+            }
+        }
+    }
+
+    return C;
+}
 
 Matrix multiply_mkl(Matrix& A, Matrix& B)
 {
@@ -152,7 +185,7 @@ Matrix multiply_mkl(Matrix& A, Matrix& B)
         k,
         B.data(),
         n,
-        0.0,  // beta
+        0.0, // beta
         C.data(),
         n
     );
