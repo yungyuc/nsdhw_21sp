@@ -88,7 +88,7 @@ def test_multiply_tile_big():
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
 
 
 def test_multiply_mkl_small():

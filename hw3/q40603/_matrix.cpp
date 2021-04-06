@@ -195,17 +195,15 @@ Matrix operator*(Matrix const & mat1, Matrix const & mat2)
 
     for (size_t i=0; i<ret.nrow(); ++i)
     {
-        for (size_t k=0; k<ret.ncol(); ++k)
+        for (size_t j=0; j<ret.ncol(); ++j)
         {
             double v = 0;
-            for (size_t j=0; j<mat1.ncol(); ++j)
+            for (size_t k=0; k<mat1.ncol(); ++k)
             {
-                v += mat1(i,j) * mat2(j,k);
+                v += mat1(i,k) * mat2(k,j);
             }
-            // std::cout<<v<<std::endl;
-            ret(i,k) = v;
+            ret(i,j) = v;
         }
-        // std::cout<<std::endl;
     }
 
     return ret;
@@ -248,12 +246,12 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tile_size) {
     size_t i, j ,k, t_i, t_j, t_k;
 
     for (i = 0; i < mat1.nrow(); i += tile_size) 
-        for (k = 0; k < mat2.ncol(); k += tile_size) 
-            for (j = 0; j <  mat1.ncol(); j += tile_size) 
-                for (t_j = j; t_j < std::min(j + tile_size, mat1.ncol()); ++t_j) 
+        for (j = 0; j < mat2.ncol(); j += tile_size) 
+            for (k = 0; k <  mat1.ncol(); k += tile_size) 
+                for (t_k = k; t_k < std::min(k + tile_size, mat1.ncol()); ++t_k) 
                     for (t_i = i; t_i < std::min(i + tile_size, mat1.nrow()); ++t_i) 
-                        for (t_k = k; t_k < std::min(k + tile_size,mat2.ncol()); ++t_k) 
-                            ret(t_i, t_k) += mat1(t_i, t_j) * mat2(t_j, t_k);
+                        for (t_j = j; t_j< std::min(j + tile_size, mat2.ncol()); ++t_j) 
+                            ret(t_i, t_j) += mat1(t_i, t_k) * mat2(t_k, t_j);
                             
     return ret;
 }
@@ -284,6 +282,7 @@ PYBIND11_MODULE(_matrix, m) {
         .def_property_readonly("nrow", &Matrix::nrow)
         .def_property_readonly("ncol", &Matrix::ncol)
         .def("show", &Matrix::show)
+        .def("__eq__", &Matrix::operator==)
         .def("__getitem__", [](const Matrix &mat, std::pair<size_t, size_t> i){
             return mat(i.first, i.second);
         })
