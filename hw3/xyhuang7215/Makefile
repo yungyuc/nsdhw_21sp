@@ -5,7 +5,7 @@ MKL:=-lblas
 _matrix: _matrix.cpp
 	g++ -O3 -Wall -shared -std=c++11 -fPIC $(PYBIND) _matrix.cpp -o _matrix$(SO) $(MKL)
 
-test:
+test: _matrix
 	python -m pytest
 
 clean:
