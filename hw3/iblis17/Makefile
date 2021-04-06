@@ -16,8 +16,7 @@ _matrix.so: matrix.o
 
 matrix.o: matrix.cpp venv
 	$(CXX) -m64 -std=c++17 -fPIC $$(./venv/bin/pybind11-config --includes) \
-	    -I./venv/include \
-	    -c matrix.cpp
+	    -I./venv/include -DMKL_ILP64 -c matrix.cpp
 
 venv:
 	python3 -m venv venv
@@ -25,6 +24,7 @@ venv:
 	$(PIP) install pybind11==2.6.2
 	$(PIP) install pytest==6.2.2
 	$(PIP) install mkl-devel==2021.2.0 mkl-static==2021.2.0
+	$(PIP) install numpy==1.19.5
 
 clean:
 	rm -rf venv *.so __pycache__ *.o

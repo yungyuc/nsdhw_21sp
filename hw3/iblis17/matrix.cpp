@@ -8,6 +8,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <mkl.h>
+
 namespace py = pybind11;
 
 
@@ -46,13 +48,13 @@ public:
 
     ~Matrix() { delete[] _buf; }
 
-    double  operator() (size_t i, size_t j) const { return this->_buf[i*_m + j]; }
-    double& operator() (size_t i, size_t j)       { return this->_buf[i*_m + j]; }
+    double  operator() (const size_t i, const size_t j) const { return this->_buf[i*_m + j]; }
+    double& operator() (const size_t i, const size_t j)       { return this->_buf[i*_m + j]; }
 
     size_t n() const { return _n; }
     size_t m() const { return _m; }
 
-    double* val() const { return _buf; }
+    double* data() const { return _buf; }
 
     std::string repr() const {
         std::string s = std::to_string(_n) + 'x' + std::to_string(_m) + '\n';
@@ -70,7 +72,7 @@ public:
     void check_boundary(size_t i, size_t j) const
     {
         if ((i >= _n) || (j >= _m))
-            throw(std::invalid_argument("out of boundary access"));
+            throw(std::out_of_range("out of boundary access"));
     }
 
     double getitem(std::tuple<size_t, size_t> idx) const
@@ -82,7 +84,7 @@ public:
         return (*this)(i, j);
     }
 
-    void setitem(std::tuple<size_t, size_t> idx, double val)
+    void setitem(std::tuple<size_t, size_t> idx, const double val)
     {
         size_t i = std::get<0>(idx);
         size_t j = std::get<1>(idx);
@@ -113,10 +115,13 @@ Matrix multiply_naive(Matrix& A, Matrix& B)
         throw(std::invalid_argument("invalid shape"));
 
     Matrix C(A.n(), B.m());
+    const size_t I = C.n();
+    const size_t J = C.m();
+    const size_t K = A.m();
 
-    for(size_t i=0; i<C.n(); ++i)
-        for(size_t j=0; j<C.m(); ++j)
-            for(size_t k=0; k<A.m(); ++k)
+    for(size_t i=0; i<I; ++i)
+        for(size_t j=0; j<J; ++j)
+            for(size_t k=0; k<K; ++k)
                 C(i, j) += A(i, k) * B(k, j);
 
     return C;
@@ -126,15 +131,29 @@ Matrix multiply_tile(Matrix& A, Matrix& B)
 {}
 
 Matrix multiply_mkl(Matrix& A, Matrix& B)
-{}
+{
+    if (A.m() != B.n())
+        throw(std::invalid_argument("invalid shape"));
+
+    Matrix C(A.n(), B.m());
+
+    cblas_dgemm(
+        CblasRowMajor, CblasNoTrans, CblasNoTrans,
+        C.n(), A.m(), C.m(), 1, A.data(), A.m(), B.data(), B.m(), 0, C.data(), C.m());
+
+    return C;
+}
 
 PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_naive", &multiply_naive, "");
+    m.def("multiply_tile",  &multiply_naive, "");
+    m.def("multiply_mkl",   &multiply_naive, "");
+
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())
         .def("n",           &Matrix::n)
         .def("m",           &Matrix::m)
-        .def("val",         &Matrix::val)
+        .def("data",        &Matrix::data)
         .def("from_list",   &Matrix::from_list)
         .def("__repr__",    &Matrix::repr)
         .def("__getitem__", &Matrix::getitem)
