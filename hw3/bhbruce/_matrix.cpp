@@ -62,6 +62,7 @@ Matrix multiply_mkl(Matrix const & matrix1, Matrix const & matrix2)
       , 0.0 /* const double beta */
       , ret.addr() /* double * c */
       , ret.ncol() /* const MKL_INT ldc */
+    )
     return ret;
 }
 
