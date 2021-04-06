@@ -73,4 +73,4 @@ def test_performance(size, outfile):
     for T in [8, 16, 32, 64]:
         d = dict(A=A, B=B, T=T, f=multiply_tile)
         t = min(timeit.repeat('f(A, B, T)', repeat=5, number=1, globals=d))
-        outfile.write(f'multiply_tile time: {t} sec, speed-up: {t/t0} x\n')
+        outfile.write(f'multiply_tile time: {t} sec, speed-up: {t0/t} x\n')
