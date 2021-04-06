@@ -55,7 +55,7 @@ public:
     {
         return m_nrow * m_ncol;
     }
-    const double* addr() const {return &m_vector[0];} // getter (ret const ref)
+    double* addr() {return &m_vector[0];} // getter (ret const ref)
     size_t const & nrow() const {return m_nrow;} // getter (ret const ref)
     size_t const & ncol() const {return m_ncol;} // getter
 
