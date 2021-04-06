@@ -6,8 +6,8 @@ import time
 
 def test_multiply_naive_small():
     np.random.seed(5555)
-    a = np.random.random((2,2))
-    b = np.random.random((2,2))
+    a = np.random.randint(10, size=(2,2))
+    b = np.random.randint(10, size=(2,2))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
@@ -16,20 +16,20 @@ def test_multiply_naive_small():
     mat_ret = multiply_naive(mat_a, mat_b)
     mat_ans = Matrix(np.matmul(a, b))
 
-    mat_ret.show()
-    print(np.matmul(a, b))
+    # mat_ret.show()
+    # print(np.matmul(a, b))
 
     assert mat_ret.nrow == mat_a.nrow
     assert mat_ret.ncol == mat_b.ncol
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
 
 def test_multiply_naive_big():
     np.random.seed(5555)
-    a = np.random.random((1000, 1000))
-    b = np.random.random((1000, 1000))
+    a = np.random.randint(10, size=(1000, 1000))
+    b = np.random.randint(10, size=(1000, 1000))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
@@ -37,47 +37,48 @@ def test_multiply_naive_big():
     mat_ret = multiply_naive(mat_a, mat_b)
     mat_ans = Matrix(np.matmul(a, b))
 
-    mat_ret.show()
-    print(np.matmul(a, b))
+    # mat_ret.show()
+    # print(np.matmul(a, b))
 
     assert mat_ret.nrow == mat_a.nrow
     assert mat_ret.ncol == mat_b.ncol
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
 
 def test_multiply_tile_small():
     np.random.seed(5555)
-    a = np.random.random((2,2))
-    b = np.random.random((2,2))
+    a = np.random.randint(10, size=(33,11))
+    b = np.random.randint(10, size=(11,33))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
 
-    mat_ret = multiply_tile(mat_a, mat_b, 1)
+    mat_ret = multiply_tile(mat_a, mat_b, 10)
     mat_ans = Matrix(np.matmul(a, b))
 
-    # mat_ret.show()
+    # print()
     # print(np.matmul(a, b))
+    # mat_ret.show()
 
     assert mat_ret.nrow == mat_a.nrow
     assert mat_ret.ncol == mat_b.ncol
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
 
 def test_multiply_tile_big():
     np.random.seed(5555)
-    a = np.random.random((1000, 1000))
-    b = np.random.random((1000, 1000))
+    a = np.random.randint(10, size=(1000, 100))
+    b = np.random.randint(10, size=(100, 1000))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
 
-    mat_ret = multiply_tile(mat_a, mat_b, 1)
-    mat_ans = Matrix(np.matmul(a, b))
+    mat_ret = multiply_tile(mat_a, mat_b, 16)
+    mat_ans = multiply_mkl(mat_a, mat_b) #Matrix(np.matmul(a, b))
 
     # mat_ret.show()
     # print(np.matmul(a, b))
@@ -87,7 +88,7 @@ def test_multiply_tile_big():
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
 
 
 def test_multiply_mkl_small():
@@ -100,8 +101,8 @@ def test_multiply_mkl_small():
     #     [7, 8],
     # ])
     np.random.seed(5555)
-    a = np.random.random((2,2))
-    b = np.random.random((2,2))
+    a = np.random.randint(10, size=(2,2))
+    b = np.random.randint(10, size=(2,2))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
@@ -111,22 +112,22 @@ def test_multiply_mkl_small():
     mat_ret = multiply_mkl(mat_a, mat_b)
     mat_ans = multiply_naive(mat_a, mat_b)
 
-    mat_nai.show()
-    mat_ret.show()
-    print(np.matmul(a, b))
+    # mat_nai.show()
+    # mat_ret.show()
+    # print(np.matmul(a, b))
 
     assert mat_ret.nrow == mat_a.nrow
     assert mat_ret.ncol == mat_b.ncol
 
     for i in range(mat_ret.nrow):
         for j in range(mat_ret.ncol):
-            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j])
+            assert mat_ret[i,j] == pytest.approx(mat_ans[i,j], abs=1e-2)
 
 def test_performance():
 
     np.random.seed(5555)
-    a = np.random.random((1000, 1000))
-    b = np.random.random((1000, 1000))
+    a = np.random.randint(10, size=(1000, 1000))
+    b = np.random.randint(10, size=(1000, 1000))
 
     mat_a = Matrix(a)
     mat_b = Matrix(b)
@@ -162,4 +163,4 @@ def test_performance():
         f.write("The mkl version is {:.1%} faster than naive version\n".format(naive_avg / mkl_avg))
         f.close()
 
-    assert tile_avg > 0
+    assert tile_avg / naive_avg <= 0.8

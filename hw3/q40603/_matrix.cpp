@@ -158,9 +158,9 @@ public:
 
 private:
 
-    size_t index(size_t row, size_t col) const
+    size_t index(size_t i, size_t j) const
     {
-        return row + col * m_nrow;
+        return i * m_ncol + j;
     }
 
     void reset_buffer(size_t nrow, size_t ncol)
@@ -262,7 +262,7 @@ Matrix multiply_mkl(Matrix const &mat1, Matrix const &mat2) {
     Matrix ret = Matrix(mat1.nrow(), mat2.ncol());
 
     cblas_dgemm(
-        CblasColMajor, CblasNoTrans, CblasNoTrans, 
+        CblasRowMajor, CblasNoTrans, CblasNoTrans, 
         mat1.nrow(), mat2.ncol(), mat1.ncol(), 
         1.0, mat1.data(), mat1.ncol(), mat2.data(), mat2.ncol(), 
         0, ret.data(), mat2.ncol());
