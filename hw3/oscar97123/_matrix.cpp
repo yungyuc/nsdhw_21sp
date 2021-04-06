@@ -56,10 +56,30 @@ Matrix multiply_naive(Matrix& mat_1, Matrix& mat_2) {
         return res;
 }
 
-Matrix multiply_tile(Matrix& mat_1, Matrix& mat_2, size_t tsize) {
-	// TODO
+Matrix multiply_tile(Matrix& mat_1, Matrix& mat_2, size_t block_size) {
+	assert (mat_1.nrow == mat_2.ncol);
 
-	return mat_1;
+	Matrix res(mat_1.nrow, mat_2.ncol);
+
+// Not working code
+/*
+	for (size_t i0 = 0; i0 < mat_1.nrow; i0 += block_size) {
+        	size_t imax = i0 + block_size > mat_1.nrow ? mat_1.nrow : i0 + block_size;
+
+        	for (size_t j0 = 0; j0 < mat_2.ncol; j0 += block_size) {
+            		size_t jmax = j0 + block_size > mat_2.ncol ? mat_2.ncol : j0 + block_size;
+
+			for (size_t i = 0; i < mat_1.ncol; i++) {
+				for (size_t row = i0; i0 < imax; row++) {
+                                        for (size_t col = j0; j0 < jmax; col++) {
+                                                res(row, col) += mat_1(row, i) * mat_2(i, col);
+                        }
+                    }
+                }
+            }
+        }
+*/
+	return res;
 }
 
 Matrix multiply_mkl(Matrix& mat_1, Matrix& mat_2) {
