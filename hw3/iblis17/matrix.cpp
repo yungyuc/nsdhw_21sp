@@ -104,6 +104,23 @@ public:
         return this;
     }
 
+    bool eq(Matrix& B) const
+    {
+        if (_n != B.n())
+            return false;
+        if (_m != B.m())
+            return false;
+
+        const size_t len = _n * _m;
+        const double* B_buf = B.data();
+        for(size_t i=0; i<len; ++i)
+        {
+            if (B_buf[i] != _buf[i])
+                return false;
+        }
+        return true;
+    }
+
 private:
     size_t _n;
     size_t _m;
@@ -207,6 +224,7 @@ PYBIND11_MODULE(_matrix, m) {
         .def("__repr__",    &Matrix::repr)
         .def("__getitem__", &Matrix::getitem)
         .def("__setitem__", &Matrix::setitem)
+        .def("__eq__",      &Matrix::eq)
 
         .def_property_readonly("nrow", &Matrix::n)
         .def_property_readonly("ncol", &Matrix::m)

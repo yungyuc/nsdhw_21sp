@@ -31,3 +31,4 @@ clean:
 
 test: build
 	./venv/bin/pytest test_matrix.py
+	cat ./performance.txt
