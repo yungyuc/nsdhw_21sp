@@ -136,18 +136,34 @@ Matrix multiply_mkl(Matrix& A, Matrix& B)
         throw(std::invalid_argument("invalid shape"));
 
     Matrix C(A.n(), B.m());
+    const size_t m = A.n();
+    const size_t n = B.m();
+    const size_t k = A.m();
 
     cblas_dgemm(
-        CblasRowMajor, CblasNoTrans, CblasNoTrans,
-        C.n(), A.m(), C.m(), 1, A.data(), A.m(), B.data(), B.m(), 0, C.data(), C.m());
+        CblasRowMajor,
+        CblasNoTrans,
+        CblasNoTrans,
+        m,
+        n,
+        k,
+        1, // alpha
+        A.data(),
+        k,
+        B.data(),
+        n,
+        0.0,  // beta
+        C.data(),
+        n
+    );
 
     return C;
 }
 
 PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_naive", &multiply_naive, "");
-    m.def("multiply_tile",  &multiply_naive, "");
-    m.def("multiply_mkl",   &multiply_naive, "");
+    m.def("multiply_tile",  &multiply_tile,  "");
+    m.def("multiply_mkl",   &multiply_mkl,   "");
 
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())
