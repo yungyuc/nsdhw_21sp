@@ -1,12 +1,12 @@
-Proposal for Pairs Trading 
-===========================
+## Proposal for Pairs Trading 
+
 
 A pairs trade is a trading strategy that involves matching a long position with a short position in two stocks with a high correlation. It uses statistical and technical analysis to seek out potential market-neutral profits.
 
 In this term project, I would like to optmize the Pairs Trading computing engine developed by the classmate in my lab. He combined the pairs trading techinque with Taiwan Stock Market intraday high-frequency trading, whcih I think is an opportunity and is suitalbe for NSD term project.
 
-Basic information
-=================
+### Basic information
+
 
 Pairs Trading always comes along with a term "Cointegration". The basic ideas of Cointegration is to test whether two time series move similarly. When applied to stock market, we can find two assets that move with cointegration, assign different weight at the assets respectively, and sell the high priced stock, buy the low priced stock. 
 
@@ -24,10 +24,10 @@ By using this strategy, we can gain the profit in both bear market and bull mark
 
 
 
-Problem to solve
-================
+### Problem to solve
 
-### Prerequiement
+
+#### Prerequiement
 
 * For each trading day ( 交易日 ), we can trade the stock from 9:00 ~ 13:30
 * To test whether two stock price has cointegration, we must collect sufficient data to do cointegration test.
@@ -39,7 +39,7 @@ Problem to solve
 The original version of the Pairs Trading computing engine is written in Python, and it takes about 2 minutes to do the computing:
 * We have to test every two stock of top 150 company (11175 combinations)
 
-### Math Part
+#### Math Part
 Consider a K-dimensional  Gaussian VAR(p) model with a trend component:
 
 ![](https://i.imgur.com/gfkwosJ.png)
@@ -65,7 +65,7 @@ Select pairs by cointegration approach:
 
 
 
-### What I want to imporve
+#### What I want to imporve
 
 * The structure of the code
 * CI procedure
@@ -73,13 +73,12 @@ Select pairs by cointegration approach:
 
 
 
-Perspective users
-=================
+### Perspective users
+
 
 Trader or the students under department of Finance.
 
-System architecture
-===================
+### System architecture
 
 input be like:
 
@@ -104,8 +103,8 @@ pairs table
 |  2| 2317     | 2308     | 0.1...     | 0.8... |  1.7... | 0.2... |
 
 
-API description
-===============
+### API description
+
 
 Python : top-level API wrapped from C++ code
 
@@ -127,15 +126,12 @@ C++ :
 There should be more, but I am not sure what is the best way to modularize it.
 
 
-Engineering infrastructure
-==========================
+### Engineering infrastructure
+
 The basic goal of this project is to speed up the original python version work.
 Since there are many vector manipulation, I will make use of MKL library and also other existing C++ statisic libraries. The final goal is to make the user import the function from python to use. I will also add some Unit test and even CI to this project. Since this is a huge project (in my opinion), I will make use of TDD principles and do whatever the best I can do.
 
-Schedule
-========
-
-
+### Schedule
 
 | date | work | comment |
 | -------- | -------- | -------- |
@@ -145,12 +141,12 @@ Schedule
 
 
 
-Question
-===
+### Question
+
 1. In Numerical Software Development, are there any special design pattern for us to follow?
 2. What is the best way to moduralize the whole computaion
 3. In numerical computaion, many function relys on the previous function output, can we use stub software testing techinque in Numerical Software Devlopment?
 
-References
-==========
+### References
+
 [1. Johansen-Test-for-Cointegrating](https://www.quantstart.com/articles/Johansen-Test-for-Cointegrating-Time-Series-Analysis-in-R//)
