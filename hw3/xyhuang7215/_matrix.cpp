@@ -154,20 +154,19 @@ Matrix multiply_tile(Matrix & Mat1, Matrix & Mat2, int Bsize){
     Matrix out(m, n, 0);
 
     for(int i = 0; i < m; i += Bsize){
-        int nrow = std::min(Bsize, m - i);
+        int arow = std::min(Bsize, m - i);
         for(int j = 0; j < n; j += Bsize){
-            int ncol = std::min(Bsize, n - j);
+            int acol = std::min(Bsize, n - j);
+            Matrix A = Matrix(arow, acol);
+            Mat1.getTile(A, i, j);
             for(int k = 0; k < m; k += Bsize){
-                int nmid = std::min(Bsize, m - k);
-                Matrix A = Matrix(nrow, nmid);
-                Matrix B = Matrix(ncol, nmid);
-                Mat1.getTile(A, i, k);
-                Mat2.getTileTrans(B, k, j);
-                out.addBlockByTile(multiply_Btranspose(A, B),  i, j);
+                int bcol = std::min(Bsize, m - k);
+                Matrix B = Matrix(bcol, acol);
+                Mat2.getTileTrans(B, j, k);
+                out.addBlockByTile(multiply_Btranspose(A, B),  i, k);
             }
         }
     }
-    
     
     return out;
 }
