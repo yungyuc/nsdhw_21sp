@@ -40,8 +40,30 @@ The original version of the Pairs Trading computing engine is written in Python,
 * We have to test every two stock of top 150 company (11175 combinations)
 
 ### Math Part
+Consider a K-dimensional  Gaussian VAR(p) model with a trend component:
 
-待補
+![](https://i.imgur.com/gfkwosJ.png)
+![](https://i.imgur.com/r9i2H42.png)
+Then we have the vector error correction model (VECM) representation:
+
+![](https://i.imgur.com/jHDZEFU.png)
+
+
+Johansen (1995) show five types of VECM models. 
+![](https://i.imgur.com/q0DDp8O.png)
+
+
+Select pairs by cointegration approach:
+1. unit-root test
+    ADF test
+2. information criteria 
+    BIC test
+5. Johansen test for cointegration
+6. Likelihood ratio test for selecting adequate VECM model
+
+
+
+
 
 ### What I want to imporve
 
@@ -58,40 +80,77 @@ Trader or the students under department of Finance.
 
 System architecture
 ===================
-(TBD)
 
-Analyze how your system takes input, produces results, and performs any other
-operations.
+input be like:
 
-Describe the system's work flow.  You may consider to use a flow chart but it
-is not required.
+stock table
+| | 2330 (TSMC) | 2454(MTK) |... |
+| -------- | -------- | -------- | -------- |
+| 1st min average price     | 612     | 933     |...     |
+| 2nd min average price     | 614     | 930     |...     |
 
-Specify the constraints assume in your system.  Describe how it is modularized.
+1. Stock raw tick data preprocessing
+2. VAR model test
+3. portmanteau test
+4. Normality test
+5. model selection
+6. calculate weight of two stocks
+7. output
+
+pairs table
+| id | stock1 | stock2 | weight 1 | weight2 | mean | standard deviation |
+| -------- | -------- | -------- | -------- |-------- |-------- |-------- |
+| 1| 2330     | 2454     | 0.3...    | 0.6... | 2.3... |  0.1... |
+|  2| 2317     | 2308     | 0.1...     | 0.8... |  1.7... | 0.2... |
+
 
 API description
 ===============
-(TBD)
-Show how a user programmatically uses your system.  You are supposed to
-implement the system using both C++ and Python.  Describe how a user writes a
-script in the system.  If you provide API in both C++ and Python, describe
-both.
+
+Python : top-level API wrapped from C++ code
+
+
+| Name | input | return |description |
+| -------- | -------- | -------- |  -------- |
+| cal_pairs     |  stock table (pandas object)  | pairs table  |  user may import the function input the table mentioned above to do the calculation  |   |
+| back_test | pairs table| profit, win rate  | user may calculate the profit with the function  | 
+
+
+C++ : 
+| Name | input | return |description |
+| -------- | -------- | -------- |  -------- |
+| ADF_test     |  series  | bool  |  check if the series is stationary  |   |
+| VAR | series  | return model object |vector autoregrssive model, there are some existing library for this like statsmodels.tsa.api |
+| order_select | series  |  int  | select best BIC order  |
+| rank | data,model,p | int | test for each model |
+
+There should be more, but I am not sure what is the best way to modularize it.
+
 
 Engineering infrastructure
 ==========================
-(TBD)
-Describe how you plan to put together the build system, testing framework, and
-documentation.  Show how you will do version control.
-
-You may use continuous integration, but it is not required.  If you use it,
-describe how it works in your code development.
+The basic goal of this project is to speed up the original python version work.
+Since there are many vector manipulation, I will make use of MKL library and also other existing C++ statisic libraries. The final goal is to make the user import the function from python to use. I will also add some Unit test and even CI to this project. Since this is a huge project (in my opinion), I will make use of TDD principles and do whatever the best I can do.
 
 Schedule
 ========
-(TBD)
-Itemize the work to do and list the work items in a timeline.  Estimate the
-efforts of each item.
+
+
+
+| date | work | comment |
+| -------- | -------- | -------- |
+| 4/7 ~ 4/30   | Input data processing, modularize the computation (design part)    |
+| 5/1 ~ 5/15 | ADF test ,VAR model, order select |
+| 5/15 ~ presentation| VECM weight calcualtion | 
+
+
+
+Question
+===
+1. In Numerical Software Development, are there any special design pattern for us to follow?
+2. What is the best way to moduralize the whole computaion
+3. In numerical computaion, many function relys on the previous function output, can we use stub software testing techinque in Numerical Software Devlopment?
 
 References
 ==========
-
-List the external references for the information provided in the proposal.
+[1. Johansen-Test-for-Cointegrating](https://www.quantstart.com/articles/Johansen-Test-for-Cointegrating-Time-Series-Analysis-in-R//)
