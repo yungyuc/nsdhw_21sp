@@ -7,6 +7,7 @@ In this term project, I would like to optmize the Pairs Trading computing engine
 
 ### Basic information
 
+Github repo : [https://github.com/q40603/pairs_trade_nsd](https://github.com/q40603/pairs_trade_nsd)
 
 Pairs Trading always comes along with a term "Cointegration". The basic ideas of Cointegration is to test whether two time series move similarly. When applied to stock market, we can find two assets that move with cointegration, assign different weight at the assets respectively, and sell the high priced stock, buy the low priced stock. 
 
