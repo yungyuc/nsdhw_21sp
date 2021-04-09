@@ -1,0 +1,3 @@
+multiply_naive takes 5.592 seconds
+multiply_tile takes 0.761 seconds, 13.602% runtime of naive version
+multiply_mkl takes 0.746 seconds, 13.334% runtime of naive version
