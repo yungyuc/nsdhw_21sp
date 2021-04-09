@@ -7,7 +7,7 @@ Basic information
 
 GitHub repository: https://github.com/Xi-Plus/shared-data-encrypter
 
-An encryption library to encrypt data that you want to send it to multiple people. You don't need to send lots of different copies. And the recipients don't share the key.
+An encryption library provides encrypted data that you want to send to multiple people. You don't need to send lots of different copies. And the recipients don't share the key.
 
 Problem to solve
 ================
@@ -34,15 +34,15 @@ There are Data key and User key. Data key is used for data to encrypt data. User
 
 Every user will get unique encrypted data key to decrypt data. They need to use their own user private key to decrypt it to get data private key.
 
-There are some requirements, so I designed it like this:
+There are some requirements, so I design it like this:
 
-- When writing data, there is no need to decrypt data key, only to check permission.
-   - So data key is asymmetric
-- When creating new data, it's need to send encrypted data key to all user with viewing permission.
-   - So user key is asymmetric.
-- Reduce calculation when user changed their password.
-   - Decrypt "encrypted user private", then encrypt it with new password. No need to change encrypted data key for the user.
-- Reduce calculation when data changed.
+- When you create new data, it's not necessary to decrypt the data key, only check the permission.
+   - It means that data key is asymmetric
+- When you create new data, all user with viewing permission would get encrypted data key.
+   - It means that user key is asymmetric.
+- Reduce calculation when users changed their password.
+   - Decrypt "encrypted user private key", then encrypt the key with new password. No need to change encrypted data key for the user.
+- Reduce calculation when data is modified.
    - Encrypt the data with data public key only. No need to change anything else.
 
 API description
