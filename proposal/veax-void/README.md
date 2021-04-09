@@ -1,6 +1,4 @@
 # :pig: PIGS :pig:
----
-
 Readme for PIGS or Pixelwise Image Graph Segmentation project developmet.
 
 ## Basic information
