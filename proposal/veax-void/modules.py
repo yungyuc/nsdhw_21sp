@@ -1,39 +1,128 @@
+"""
+Logical Errors to fix:
+1) Multiple max degree!
+If we have multiple max values in a degree matrix we need to 
+search through all of them and not only use one (like right now).
+It means that you can get ground_node with better IR value!
+
+Ideas to imprive:
+1) Use Hilbert curve instad of usual flatting
+"""
+
 import numpy as np
 
 class PIG:
-    def __init__(self, image, beta=95):
+    def __init__(self, image, beta=95, mode='manual', stop=1e-5, verbose=False):
+        """
+        Args:
+            image: np.array or PIL.Image
+            beta: parameter of inner kernal function for image to graph translation
+            mode: {'manual/onerun/usestop'} mode of a PIG run, see _autorun for details 
+            stop: stop parameter for recursion
+            verbose: print of progress info
+        """
         # INNER
         self._width = image.shape[0]
         self._hight = image.shape[1]
+        self.beta = beta
         
         self.flat_image = image.flatten()
         self.classes = np.zeros(self.__len__())
         
-        # API
-        # 1.1. Generate weights
-        self.weights = self._compute_weights(beta)
-        
-        # 1.2. Calculate graph degree
-        self.degree = self._compute_degree()
-        
-        # 2.1. Determent ground node
-        self.ground_node = self.degree.argmax()
-        
-        # 2.2. Build Laplacian matrix
-        self.laplace = self._build_laplace()
-        
-        print('PIG is done.')
+        # Run pig on auto
+        self._autorun(mode, verbose)
 
-    def absorb_classes(self):
-        #!!! FININSH
+        print('\nPIG initialization is done.')
+
+
+    def _autorun(self, mode, verbose=False):
+        """Run of PIG
+        
+        Modes:
+            manual: user run all functions by himself
+            onerun: auto run of one cycle
+            usestop: auto run of recursion that use stop condition
+                     stop condition must be specified!
+        """
+        
+        if mode == 'manual':
+            return
+        
+        elif mode == 'usestop':
+            self.weights = self._compute_weights(self.beta)
+            self.degree = self._compute_degree()
+            
+            max_degree_idxs = np.where(
+                self.degree == self.degree.max())
+            
+            self.ground_node = self.degree.argmax()
+            
+        elif mode == 'onerun':
+            # 1.1. Generate weights
+            if verbose: print('Graph weights generation...')
+            self.weights = self._compute_weights(self.beta)
+
+            # 1.2. Calculate graph degree
+            if verbose: print('Graph degree calculation...')
+            self.degree = self._compute_degree()
+
+            # 2.1. Determent ground node
+            if verbose: print('Graph ground node determining ...')
+            self.ground_node = self.degree.argmax()
+
+            # 2.2. Build Laplacian matrix
+            if verbose: print('Laplacian matrix buildig...')
+            self.laplace = self._build_laplace()
+            
+            # 2.3 Droping ground node from degree and Laplacian matrix
+            if verbose: print('Droping ground node from laplace and degree...')
+            self._drop_ground_node()
+            
+            # 3.0. Solve L*x = d for x
+            if verbose: print('Solving itself...')
+            self._solve_itself()
+            
+            # 4.0 Find best threshold based on Isometric ratio
+            if verbose: print('Finding best threshold based on Isometric ratio...')
+            self._find_best_threshold(verbose=verbose)
+            
+            # Assign classes to each pixel based on best thresholding 
+            if verbose: print('Assigning classes to each pixel...')
+            self._absorb_classes()
+        else:
+            raise ValueError('Arg \'mode\' must be one of: manual, onerun, usestop')
+
+    def _absorb_classes(self, ground_to='in'):
+        """Separate nodes to classes
+        
+        ground_to - {in, out} witch class assign to ground node, 
+                    None for -1 class 
+        """
+        # Find number of new class for inside and outside set
         currnt_classes = np.unique(self.classes)
-        next_class = currnt_classes.max() + 1
+        new_class_in = currnt_classes.max() + 1
+        new_class_out = currnt_classes.max() + 2
         
-        self.classes[self.ground_node] = next_class
-        self.classes[]
+        # Ground node to new_class
+        if ground_to == 'in':
+            self.classes[self.ground_node] = new_class_in
+        elif ground_to == 'out':
+            self.classes[self.ground_node] = new_class_out
+        else:
+            self.classes[self.ground_node] = -1
         
+        cond_out = self.x[:self.ground_node] > self.threshold
+        self.classes[:self.ground_node][cond_out] = new_class_out
+        cond_out = self.x[self.ground_node:] > self.threshold
+        self.classes[self.ground_node+1:][cond_out] = new_class_out
         
-    def _find_best_threshold(self, num_of_steps=20):
+        cond_in = self.x[self.ground_node:] <= self.threshold
+        self.classes[self.ground_node+1:][cond_in] = new_class_in
+        cond_in = self.x[:self.ground_node] <= self.threshold
+        self.classes[:self.ground_node][cond_in] = new_class_in
+
+
+    def _find_best_threshold(self, num_of_steps=20, verbose=False):
         """Greedy threshold search
         
         Best threshold for lowest Isometric Ratio
@@ -54,7 +143,8 @@ class PIG:
                 lower_th = threshold
                 
         self.threshold = lower_th
-        print(f'Threshold: {lower_th} | Isometric Ratio: {lower_IR}')
+        if verbose:
+            print(f'\tThreshold:\t\t{lower_th}\n\tIsometric Ratio:\t{lower_IR}')
 
 
     def _compute_isometric_ratio(self, threshold):
@@ -83,13 +173,13 @@ class PIG:
         return iso_ratio
 
 
-    def solve_self(self):
+    def _solve_itself(self):
         self.x = np.linalg.solve(
             self.laplace, self.degree)
         return self.x
 
 
-    def drop_ground_node(self):
+    def _drop_ground_node(self):
         """Drop ground node from Laplace and degree
         
         ground node - vertex with max value in degree
