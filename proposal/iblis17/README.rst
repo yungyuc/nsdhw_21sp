@@ -11,7 +11,7 @@ aims to provide a lightweight framework for working with time series data in Jul
 
 This package provide a homogeneous-type static time series data structure -
 ``TimeArray``.
-The static property implies that the content of ``TimeArray`` is immutable after
+The static property implies that the length/size of ``TimeArray`` is immutable after
 created.
 The homogeneous-type implies that the value of the time series is in the same type.
 Actually, the underlying implementation of the value container is
