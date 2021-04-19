@@ -6,6 +6,8 @@ Proposal for Heterogeneously-typed and Dynamic Time Series Data Structure of Tim
 Basic information
 =================
 
+Repository: https://github.com/JuliaStats/TimeSeries.jl
+
 `TimeSeries.jl <https://github.com/JuliaStats/TimeSeries.jl>`_
 aims to provide a lightweight framework for working with time series data in Julia.
 
