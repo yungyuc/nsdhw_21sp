@@ -23,10 +23,16 @@ develop a trading bot specify for it.
 Basic information
 =================
 
-The GitHub repository (URL) hosting your term project. <TO-BE CREATED>
+The GitHub repository (URL):
+https://github.com/oscar97123/Bitcoin-trading-bot
 
-The project aims to develop an auto trading bot specifily for bitcoin trading in order to gain profit 
-from buying the coin at low price but selling high. 
+The project aims to develop an auto trading bot specially for bitcoin trading in order to gain profit 
+from buying the coin at low price but selling high. More detailly, the program will analyze the market activities 
+such as the trading throughput before making according decisions.
+
+Since the project is solely focus on latency improvement, therefore, for simplicity, the program will validate the calculation latency 
+improvement when performing the calculation on the last 30 days' historical price data in order to prevent real-time I/O 
+system responce bottleneck.
 
 
 Problem to solve
@@ -52,6 +58,7 @@ The goals that I want to achieved for the project are as follow.
 
 <<Math OR Algorithm>>
 |<TO-DO>
+
 
 
 Perspective users
@@ -80,6 +87,10 @@ API description
 
 <TO-DO>
 
+The telegram bot UI and function design is as follow:
+<<<Image showcasing telegram bot UI>>>
+<<<Describe python API>>>
+
 Show how a user programmatically uses your system.  You are supposed to
 implement the system using both C++ and Python.  Describe how a user writes a
 script in the system.  If you provide API in both C++ and Python, describe
@@ -88,21 +99,27 @@ both.
 Engineering infrastructure
 ==========================
 
-<TO-DO>
+There will be 2 branches in the development. The first branch(master) holds the stable version of the software(with unit test assurance).
+The second branch(development) will be a workstation for developing features, moreover, the unit test will perform in this branch either. 
+Only when the unit test passes and no crashes occurred, then the development branch merge into the master branch as a stable build. 
 
-Describe how you plan to put together the build system, testing framework, and
-documentation.  Show how you will do version control.
+Here's the image showcasing the proposed Version Control.
 
-You may use continuous integration, but it is not required.  If you use it,
-describe how it works in your code development.
+.. image:: https://i.imgur.com/DlnArn8.png
+                :alt: DlnArn8
+
+The project will split into functions for maintainability and the function name will be meaningful to make sure the readability is on point. 
+Besides, there will be comments on complex code.
 
 Schedule
 ========
 
-<TO-DO>
-
-Itemize the work to do and list the work items in a timeline.  Estimate the
-efforts of each item.
+4/11 - 4/18(1 week)  - Research
+4/19 - 5/2 (2 weeks) - 1st prototype (Integrate Binance's RSET API for getting 
+real-time crypto price, simple transaction rule testing(eg. sell all bitcoin if the price raise 5%).
+5/3  - 5/23(3 weeks) - C++ computation development and optimization + testing
+5/24 - 5/31(1 week)  - High-level API development (Python + Telegram bot - if time is sufficient) + testing
+6/1  - 6/6(aprx. 1 week) - Overall test, minor changes, bugfixes
 
 References
 ==========
