@@ -38,21 +38,34 @@ So the sorted property should be consider as enabled.
 Problem to solve
 ================
 
-There are demands of table-like data structure that can hold sorted, Heterogeneous type
-and dynamic length time series data.
-
-
+There are demands of table-like data structures that can hold sorted time axis,
+heterogeneous type and dynamic length time series data.
+This proposal proposes to build a series of data type, interface and operations
+that can fulfill the demands.
 
 
 Perspective users
 =================
 
 
+
 System architecture
 ===================
 
-API description
-===============
+
+API descriptions
+================
+
+Time Type
+----------------------------------------------------------------------
+
+The supported time types can be used as elements of time axis.
+
+#. ``Dates.TimeType``, the abstract time type from Julia's stdlib.
+#. ``Dates.Period``, the abstract period type from Julia's stdlib.
+   It is used for a time interval or a time offset relative to some reference
+   point.
+
 
 Engineering infrastructure
 ==========================
