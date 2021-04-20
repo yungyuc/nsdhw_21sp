@@ -6,6 +6,7 @@ Proposal for Heterogeneously-typed and Dynamic Time Series Data Structure of Tim
 .. _DataFrames.jl: https://github.com/JuliaData/DataFrames.jl
 .. _Tables.jl: https://github.com/JuliaData/Tables.jl
 .. _TableOperations.jl: https://github.com/JuliaData/TableOperations.jl
+.. _IndexedTables.jl: https://github.com/JuliaData/IndexedTables.jl
 
 Basic information
 ===============================================================================
@@ -35,6 +36,31 @@ In case of manipulating the time series data, the data should be sorted against
 the time axis. If the data is not sorted, most of operation,
 for instance,  ``lag`` and ``lead``, cannot be applied.
 So the sorted property should be consider as enabled.
+
+Here we reviewed the 8 combination on these properties[1]:
+
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| Combination | Unsorted (A) | Hetero (A) | Dynamic (A)  | Comment                                                             |
+|             | / Sorted (B) | / Homo (B) | / Static (B) |                                                                     |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 1           | A            | A          | A            | This is fulfilled by `DataFrames.jl`_.                              |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 2           | B            | A          | A            | Since the timestamps got sorted,                                    |
+|             |              |            |              | the time-related operations could be applied.                       |
+|             |              |            |              | Its design and implementation is focued by this proposal.           |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 3           | A            | B          | A            |                                                                     |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 4           | B            | B          | A            |                                                                     |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 5           | A            | A          | B            | It's implemented by `IndexedTables.jl`                              |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 6           | B            | A          | B            |                                                                     |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 7           | A            | B          | B            |                                                                     |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
+| 8           | B            | B          | B            | This is the ``TimeArray`` data type implemented in `TimeSeries.jl`_ |
++-------------+--------------+------------+--------------+---------------------------------------------------------------------+
 
 
 Problem to solve
