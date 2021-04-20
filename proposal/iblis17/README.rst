@@ -6,7 +6,7 @@ Proposal for Heterogeneously-typed and Dynamic Time Series Data Structure of Tim
 .. _DataFrames.jl: https://github.com/JuliaData/DataFrames.jl
 
 Basic information
-=================
+===============================================================================
 
 Repository: `TimeSeries.jl`_
 
@@ -36,7 +36,7 @@ So the sorted property should be consider as enabled.
 
 
 Problem to solve
-================
+===============================================================================
 
 There are demands of table-like data structures that can hold sorted time axis,
 heterogeneous type and dynamic length time series data.
@@ -45,16 +45,16 @@ that can fulfill the demands.
 
 
 Perspective users
-=================
+===============================================================================
 
 
 
 System architecture
-===================
+===============================================================================
 
 
 API descriptions
-================
+===============================================================================
 
 Time Type
 ----------------------------------------------------------------------
@@ -147,12 +147,12 @@ implies some breaking changes.
 
 
 Schedule
-========
+===============================================================================
 
 
 
 References
-==========
+===============================================================================
 
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-777379241
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482
