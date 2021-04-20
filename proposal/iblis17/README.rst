@@ -243,20 +243,34 @@ all timestamp vector iterators.
 
 #. The iterator protocol of Julia's stdlib supports
 
-   +----------------------------------------------+-------------------------------------+----------------------------------+
-   | Function Prototype                           | Return Type                         | Comment                          |
-   +==============================================+=====================================+==================================+
-   | ``iterate(::T) where T<:AbstractTimeIter``   | ``T``                               | Returns the inital time          |
-   +----------------------------------------------+-------------------------------------+----------------------------------+
-   | ``iterate(::AbstractTimeIter, state)``       | ``Tuple{D, Any}``                   | Where ``D`` is the ``TimeType``  |
-   +----------------------------------------------+-------------------------------------+----------------------------------+
-   | ``IteratorSize(::Type{<:AbstractTimeIter})`` | ``HasLength()`` or ``Isinfinite()`` | The finite and infinte length of |
-   |                                              |                                     | iterators are acceptable         |
-   +----------------------------------------------+-------------------------------------+----------------------------------+
-   | ``length(::T) where T<:AbstractTimeIter``    | ``Integer``                         | Optional                         |
-   +----------------------------------------------+-------------------------------------+----------------------------------+
-   | ``eltype(::AbstractTimeIter)``               | ``TimeType`` or ``Period``          |                                  |
-   +----------------------------------------------+-------------------------------------+----------------------------------+
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+   | Function Prototype                           | Return Type                         | Comment                           |
+   +==============================================+=====================================+===================================+
+   | ``iterate(::T) where T<:AbstractTimeIter``   | ``T``                               | Returns the inital time           |
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+   | ``iterate(::AbstractTimeIter, state)``       | ``Tuple{D, Any}``                   | Where ``D`` is the ``TimeType``   |
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+   | ``IteratorSize(::Type{<:AbstractTimeIter})`` | ``HasLength()`` or ``Isinfinite()`` | The finite and infinite length of |
+   |                                              |                                     | iterators are acceptable          |
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+   | ``length(::T) where T<:AbstractTimeIter``    | ``Integer``                         | Optional                          |
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+   | ``eltype(::AbstractTimeIter)``               | ``TimeType`` or ``Period``          |                                   |
+   +----------------------------------------------+-------------------------------------+-----------------------------------+
+
+#. The concrete type of ``AbstractTimeIter`` [2][3]
+
+   #. ``TimeGrid``: A discrete time axis.
+      It contains the starting point, the timestep size and an optional ending time.
+      So the length of iterator is fixed or infinite.
+   #. ``IrregularTimeGrid``: A discrete time axis with internal index to
+      represent the Irregular grid.
+   #. ``SparseTimeGrid``: There are some missed interval in the time axis.
+
+
+#. Operations
+
+.. TBD
 
 
 The new table type ``TimeTable``
@@ -265,6 +279,7 @@ The new table type ``TimeTable``
 The new type proposed is named as ``TimeTable``, and
 it'a direct subtype of ``AbstractTimeSeries``.
 
+.. TBD
 
 Engineering infrastructure
 ===============================================================================
@@ -316,5 +331,7 @@ References
 ===============================================================================
 
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-777379241
+#. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-778704466
+#. https://gist.github.com/sairus7/7a3f2ea6d3e0c34b4ea973d3b80105e8
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482
 #. https://www.codeproject.com/Articles/168662/Time-Period-Library-for-NET
