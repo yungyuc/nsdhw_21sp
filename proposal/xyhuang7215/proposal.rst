@@ -51,10 +51,10 @@ physical engine
 Schedule
 ========
 
-04/19 ~ 04/25 (1 week) : setup environment / learn basic Ogre engine
-04/26 ~ 05/16 (3 week) : physic engine / collision detection
-05/17 ~ 05/23 (1 week) : game objects management
-05/24 ~ 06/07 (2 week) : debug / demo
+| 04/19 ~ 04/25 (1 week) : setup environment / learn basic Ogre engine
+| 04/26 ~ 05/16 (3 week) : physic engine / collision detection
+| 05/17 ~ 05/23 (1 week) : game objects management
+| 05/24 ~ 06/07 (2 week) : debug / demo
 
 References
 ==========
