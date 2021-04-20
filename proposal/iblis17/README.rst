@@ -46,12 +46,6 @@ This proposal proposes to build a series of data type, interface and operations
 that can fulfill the demands.
 
 
-Perspective users
-===============================================================================
-
-
-
-
 System architecture
 ===============================================================================
 
@@ -212,6 +206,31 @@ Interface of ``AbstractTimeSeries``
    +-------------------------------+---------+---------------------------------------------------+
    | ``TableOperations.map``       | ✔       | Test cases only.                                  |
    +-------------------------------+---------+---------------------------------------------------+
+
+
+Vector of Timestamps
+----------------------------------------------------------------------
+
+We takes the advantage of iterator in Julia to provide the lazy version of
+a vector of timestamps. We set up a ``AbstractTimeIter`` as the root type of
+all timestamp vector iterators.
+
+#. The iterator protocol of Julia's stdlib supports
+
+   +----------------------------------------------+-------------------------------------+----------------------------------+
+   | Function Prototype                           | Return Type                         | Comment                          |
+   +==============================================+=====================================+==================================+
+   | ``iterate(::T) where T<:AbstractTimeIter``   | ``T``                               | Returns the inital time          |
+   +----------------------------------------------+-------------------------------------+----------------------------------+
+   | ``iterate(::AbstractTimeIter, state)``       | ``Tuple{D, Any}``                   | Where ``D`` is the ``TimeType``  |
+   +----------------------------------------------+-------------------------------------+----------------------------------+
+   | ``IteratorSize(::Type{<:AbstractTimeIter})`` | ``HasLength()`` or ``Isinfinite()`` | The finite and infinte length of |
+   |                                              |                                     | iterators are acceptable         |
+   +----------------------------------------------+-------------------------------------+----------------------------------+
+   | ``length(::T) where T<:AbstractTimeIter``    | ``Integer``                         | Optional                         |
+   +----------------------------------------------+-------------------------------------+----------------------------------+
+   | ``eltype(::AbstractTimeIter)``               | ``TimeType`` or ``Period``          |                                  |
+   +----------------------------------------------+-------------------------------------+----------------------------------+
 
 
 The new table type ``TimeTable``
