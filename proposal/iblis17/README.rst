@@ -270,7 +270,34 @@ all timestamp vector iterators.
 
 #. Operations
 
-.. TBD
+   #. Relative time calculation. A common notation of a relative timestamp
+      is in the form of ``T+n``, where the n denotes the ``n`` timestep.
+      By overload the ``getindex`` function,
+      it can provide a API like ``iter[+, 0]`` to represent a time offset:
+
+      +-----------------------------------------------------------+-------------+----------------------------------------------------+
+      | Function Prototype                                        | Return Type | Comment                                            |
+      +===========================================================+=============+====================================================+
+      | ``getindex(::AbstractTimeIter, ::typeof(+), n::Integer)`` | ``Period``  | Get the offset of stepping forward ``n`` timesteps |
+      +-----------------------------------------------------------+-------------+----------------------------------------------------+
+      | ``getindex(::AbstractTimeIter, ::typeof(+), n::Integer)`` | ``Period``  |                                                    |
+      +-----------------------------------------------------------+-------------+----------------------------------------------------+
+      | ``getindex(::AbstractTimeIter, ::typeof(+), p::Period)``  | ``Integer`` | Get the index of a time offset                     |
+      +-----------------------------------------------------------+-------------+----------------------------------------------------+
+
+      Example usage::
+
+          julia> g = TimeGrid(DateTime(2020, 1, 1), 60)
+          TimeGrid(DateTime("2020-01-01T00:00:00"), 60.0)
+
+          julia> g[+, 0]
+          0 milliseconds
+
+          julia> g[+, 42]
+          700 milliseconds
+
+          julia> g[+, Minute(1)]
+          3601
 
 
 The new table type ``TimeTable``
