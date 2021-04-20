@@ -67,6 +67,44 @@ The supported time types can be used as elements of time axis.
    point.
 
 
+Vector of Timestamps
+----------------------------------------------------------------------
+
+A vector of timestamps should be sorted, in order to apply time-related operations.
+Allowing repeating timestamp or not is one of the key properties.
+In this proposal, repeating timestamp in a vector should be allowed.
+In some real cases, sensor generated timestamps might be the same due to the
+inaccurate timer or time resolution,
+but allow repeating does introduce some API design issues.
+
+In case of repeated timestamps, it can be solved by introduce the secondary index,
+assume that the order from user input is in ascending order.
+The secondary index can be automatically built. For instance:
+
++----------+-----------------+--------+
+| Timestap | Secondary Index | Valueu |
++==========+=================+========+
+| 10:00:00 | 1               | foo    |
++----------+-----------------+--------+
+| 10:00:00 | 2               | bar    |
++----------+-----------------+--------+
+| 10:00:00 | 3               | baz    |
++----------+-----------------+--------+
+| 10:30:00 | 1               | qaz    |
++----------+-----------------+--------+
+| ...      |                 |        |
++----------+-----------------+--------+
+
+The we can provides two sets of APIs.
+#. All the APIs in the first set will take ``secondary index = 1`` and compute.
+   This set is designed for the case that there aren't repeating in the timestamps,
+   or user want to ignore the repeating in specific operations.
+#. The second set can accept the secondary index as a argument, and the
+   return type will be different from the first set of APIs. Most of APIs in this
+   set should return the table type that same or similar to the input table.
+
+
+
 Engineering infrastructure
 ==========================
 
@@ -110,6 +148,8 @@ implies some breaking changes.
 
 Schedule
 ========
+
+
 
 References
 ==========
