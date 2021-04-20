@@ -10,38 +10,51 @@ Recently, I enjoy playing Sekiro: Shadows Die Twice. So I think it might be
 a good and interesting practice to build my own game engine specially for this
 kind of action adventure game.
 
-Since it seems hard to make a good renderning engine from scratch, I decide to
-use ogre engine (Object-Oriented Graphics Rendering Engine) , a 3D rendering
-engine written in C++. So I can just focus on building other components of
-engine, like physics and collision.
+I will use Ogre enigne (Object-Oriented Graphics Rendering Engine, a open 3D
+rendering engine), and manage other game objects. Physical engine and collision
+detection are essential.
+
+github repo: https://github.com/xyhuang7215/Sekirogre
 
 Problem to solve
 ================
    
 1. Manage the characters, items and scenes.
-2. physics engine.
+2. Physics engine.
+3. Interaction between rendering system and game objects.
 
 Perspective users
 =================
 
 Those who want to build a action adventure game but lack of programming skill.
-Maybe a GUI like RPG Maker or Unity.
 
 System architecture
 ===================
 
+python scripts to make character/scene/event, and define their behaviors.
+C++ scripts to control rendering and implement behaviors.
+
 
 API description
 ===============
+addCharacter
+Character.appendAction()
 
 
 Engineering infrastructure
 ==========================
+Ogre engine
+Collision 
+physical engine
 
 
 Schedule
 ========
 
+04/19 ~ 04/25 (1 week) : setup environment / learn basic Ogre engine
+04/26 ~ 05/16 (3 week) : physic engine / collision detection
+05/17 ~ 05/23 (1 week) : game objects management
+05/24 ~ 06/07 (2 week) : debug / demo
 
 References
 ==========
