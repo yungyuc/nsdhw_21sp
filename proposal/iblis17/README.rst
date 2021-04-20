@@ -49,11 +49,8 @@ Perspective users
 
 
 
+
 System architecture
-===============================================================================
-
-
-API descriptions
 ===============================================================================
 
 Time Type
@@ -96,17 +93,61 @@ The secondary index can be automatically built. For instance:
 +----------+-----------------+--------+
 
 The we can provides two sets of APIs.
+
 #. All the APIs in the first set will take ``secondary index = 1`` and compute.
    This set is designed for the case that there aren't repeating in the timestamps,
    or user want to ignore the repeating in specific operations.
+
 #. The second set can accept the secondary index as a argument, and the
    return type will be different from the first set of APIs. Most of APIs in this
    set should return the table type that same or similar to the input table.
 
 
 
+API descriptions
+===============================================================================
+
+There is a abstract type ``AbstractTimeSeries`` in this project,
+all table-like data structure should be a subtype of it.
+
+``AbstractTimeSeries`` Design
+----------------------------------------------------------------------
+
+The original type parameters are three in ``AbstractTimeSeries{T,N,D<:TimeType}``,
+where ``T`` for the value array type, ``N`` for the dimension of value array
+and ``D`` for the concrete ``TimeType``.
+
+We propose that releasing the constraints of type parameters ``T`` and ``N``
+and only keep the purpose of ``D``, but not limit it to ``TimeType``.
+Since we only have on type parameter, so rename ``D`` to ``T`` by convention::
+
+
+    struct AbstractTimeSeries{T}
+
+
+Interface of ``AbstractTimeSeries``
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#. The `Tables.jl`_ integration
+
+   +--------------------+--------------------+-----------------------------------------------------------------+
+   | Function prototype | Support            | Comment                                                         |
+   +====================+====================+=================================================================+
+   | ``Tables.istable`` | :heavy_check_mark: | An ``AbstractTimeSeries`` instance returns ``true`` by default. |
+   +--------------------+--------------------+-----------------------------------------------------------------+
+
+#. The `TableOperations.jl`_ integration
+
+
+The new table type ``TimeTable``
+----------------------------------------------------------------------
+
+The new type proposed is named as ``TimeTable``, and
+it'a direct subtype of ``AbstractTimeSeries``.
+
+
 Engineering infrastructure
-==========================
+===============================================================================
 
 Testing Framework
 ----------------------------------------------------------------------
