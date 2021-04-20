@@ -1,8 +1,6 @@
 ===========================
 Proposal for SekirOgre
 ===========================
-
-
 Basic information
 =================
 
@@ -19,9 +17,9 @@ github repo: https://github.com/xyhuang7215/Sekirogre
 Problem to solve
 ================
    
-1. Manage the characters, items and scenes.
-2. Physics engine.
-3. Interaction between rendering system and game objects.
+| 1. Manage the characters, items and scenes.
+| 2. Physics engine.
+| 3. Interaction between rendering system and game objects.
 
 Perspective users
 =================
@@ -37,15 +35,15 @@ C++ scripts to control rendering and implement behaviors.
 
 API description
 ===============
-addCharacter
-Character.appendAction()
+| addCharacter
+| Character.appendAction()
 
 
 Engineering infrastructure
 ==========================
-Ogre engine
-Collision 
-physical engine
+| Ogre engine
+| Collision 
+| physical engine
 
 
 Schedule
