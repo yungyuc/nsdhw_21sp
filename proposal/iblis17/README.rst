@@ -276,7 +276,7 @@ all timestamp vector iterators.
       +----------------------------------------------+--------------+-------------------------------+
       | Function Prototype                           | Return Type  | Comment                       |
       +==============================================+==============+===============================+
-      | ``getindex(::AbstractTimeIter, ::Int)        | ``TimeType`` | Integer index -> ``TimeType`` |
+      | ``getindex(::AbstractTimeIter, ::Int)``      | ``TimeType`` | Integer index -> ``TimeType`` |
       +----------------------------------------------+--------------+-------------------------------+
       | ``getindex(::AbstractTimeIter, ::TimeType)`` | ``TimeType`` | Integer index <- ``TimeType`` |
       +----------------------------------------------+--------------+-------------------------------+
