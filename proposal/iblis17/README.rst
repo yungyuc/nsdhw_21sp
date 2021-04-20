@@ -331,6 +331,8 @@ all timestamp vector iterators.
       +------------------------------------------------+-------------+----------------------------------------------------+
 
 
+      .. TBD
+
 
 
 The new table type ``TimeTable``
@@ -340,6 +342,7 @@ The new type proposed is named as ``TimeTable``, and
 it'a direct subtype of ``AbstractTimeSeries``.
 
 .. TBD
+
 
 Engineering infrastructure
 ===============================================================================
@@ -385,6 +388,23 @@ implies some breaking changes.
 Schedule
 ===============================================================================
 
++------+-------------------------------------------------------------------------------------+
+| Time | Target                                                                              |
++======+=====================================================================================+
+| 4/26 | Complete the detail of APIs design in this proposal and [4]                         |
++------+-------------------------------------------------------------------------------------+
+| 5/3  | Implement related data structures about vector of timestamps (``AbstractTimeIter``) |
+|      | with test cases included.                                                           |
++------+-------------------------------------------------------------------------------------+
+| 5/10 | Apply the new design of ``AbstractTimeSeries``;                                     |
+|      | modifiy the original ``TimeArray`` to fit the new design.                           |
++------+-------------------------------------------------------------------------------------+
+| 5/17 | Implement related data structures about table type ``TimeTable``.                   |
++------+-------------------------------------------------------------------------------------+
+| 5/24 | Continu on implementing ``TimeTable``.                                              |
++------+-------------------------------------------------------------------------------------+
+| 5/31 | Performance debugging and tuning for the type ``TimeTable``.                        |
++------+-------------------------------------------------------------------------------------+
 
 
 References
@@ -393,5 +413,5 @@ References
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-777379241
 #. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-778704466
 #. https://gist.github.com/sairus7/7a3f2ea6d3e0c34b4ea973d3b80105e8
-#. https://github.com/JuliaStats/TimeSeries.jl/issues/482
+#. https://github.com/JuliaStats/TimeSeries.jl/issues/482#issuecomment-792278887
 #. https://www.codeproject.com/Articles/168662/Time-Period-Library-for-NET
