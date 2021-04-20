@@ -270,6 +270,17 @@ all timestamp vector iterators.
 
 #. Operations
 
+   #. Indexing related operations: In order to support transformation between
+      integer index and ``TimeType``
+
+      +----------------------------------------------+--------------+-------------------------------+
+      | Function Prototype                           | Return Type  | Comment                       |
+      +==============================================+==============+===============================+
+      | ``getindex(::AbstractTimeIter, ::Int)        | ``TimeType`` | Integer index -> ``TimeType`` |
+      +----------------------------------------------+--------------+-------------------------------+
+      | ``getindex(::AbstractTimeIter, ::TimeType)`` | ``TimeType`` | Integer index <- ``TimeType`` |
+      +----------------------------------------------+--------------+-------------------------------+
+
    #. Relative time calculation. A common notation of a relative timestamp
       is in the form of ``T+n``, where the n denotes the ``n`` timestep.
       By overload the ``getindex`` function,
