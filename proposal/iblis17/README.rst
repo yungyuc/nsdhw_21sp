@@ -4,6 +4,8 @@ Proposal for Heterogeneously-typed and Dynamic Time Series Data Structure of Tim
 
 .. _TimeSeries.jl: https://github.com/JuliaStats/TimeSeries.jl
 .. _DataFrames.jl: https://github.com/JuliaData/DataFrames.jl
+.. _Tables.jl: https://github.com/JuliaData/Tables.jl
+.. _TableOperations.jl: https://github.com/JuliaData/TableOperations.jl
 
 Basic information
 ===============================================================================
@@ -130,13 +132,45 @@ Interface of ``AbstractTimeSeries``
 
 #. The `Tables.jl`_ integration
 
-   +--------------------+--------------------+-----------------------------------------------------------------+
-   | Function prototype | Support            | Comment                                                         |
-   +====================+====================+=================================================================+
-   | ``Tables.istable`` | :heavy_check_mark: | An ``AbstractTimeSeries`` instance returns ``true`` by default. |
-   +--------------------+--------------------+-----------------------------------------------------------------+
+   +-------------------------+---------+------------------------------------------------------------------+
+   | Function prototype      | Support | Comment                                                          |
+   +=========================+=========+==================================================================+
+   | ``Tables.istable``      | ✔       | An ``AbstractTimeSeries`` instance returns ``true`` by default   |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.columnaccess`` | ✔       | Returns ``true`` by default                                      |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.columns``      | ✔       | Returns the `AbstractTimeSeries` instance by default             |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.rowaccess``    | ✔       | Returns ``true`` by default                                      |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.rows``         | ✔       | Returns a vector ``Row`` type or a iterator that                 |
+   |                         |         | that can iter over each ``Row``                                  |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.schema``       | ✔       | Returns the ``Tables.Schema`` instance                           |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.materializer`` | ✔       | Returns the constructor of the concrete type                     |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.getcolumn``    | ✔       | Supports two types of index, integer index and ``Symbol`` index. |
+   |                         |         | And ``Tables.getcolumn(table, ::Type{T}, i::Int, nm::Symbol)``   |
+   |                         |         | can be optionally supported.                                     |
+   +-------------------------+---------+------------------------------------------------------------------+
+   | ``Tables.columnnames``  | ✔       | Returns the column names                                         |
+   +-------------------------+---------+------------------------------------------------------------------+
 
 #. The `TableOperations.jl`_ integration
+
+   +-------------------------------+---------+---------------------------------------------------+
+   | Function                      | Support | Comment                                           |
+   +===============================+=========+===================================================+
+   | ``TableOperations.select``    | ✔       | Nohting to implement in this project,             |
+   |                               |         | Just add some test cases to check the correctness |
+   +-------------------------------+---------+---------------------------------------------------+
+   | ``TableOperations.transform`` | ✔       | Test cases only.                                  |
+   +-------------------------------+---------+---------------------------------------------------+
+   | ``TableOperations.filter``    | ✔       | Test cases only.                                  |
+   +-------------------------------+---------+---------------------------------------------------+
+   | ``TableOperations.map``       | ✔       | Test cases only.                                  |
+   +-------------------------------+---------+---------------------------------------------------+
 
 
 The new table type ``TimeTable``
