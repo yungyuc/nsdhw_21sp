@@ -70,9 +70,43 @@ The supported time types can be used as elements of time axis.
 Engineering infrastructure
 ==========================
 
-1. Testing framework
-2. CI system
-3. Release Procedure
+Testing Framework
+----------------------------------------------------------------------
+
+The project `TimeSeries.jl`_ already adopts the testing framework of Julia stdlib --
+``Test`` library.
+In this proposal, all the changes should be shipped with test cases that can
+cover as more as possible.
+The code is located at the ``tests/`` dir.
+
+The coverage service is `Coveralls <https://coveralls.io/>`_, which has been
+enabled for the project already.
+
+
+CI System
+----------------------------------------------------------------------
+
+The project `TimeSeries.jl`_ use github action as the CI system infrastructure.
+It conducts three jobs.
+
+#. Run the test cases by driving the testing framework
+   on any push event and PR opened.
+   The test matrix is the Julia LTS version and the latest stable version, which are
+   v1.0 and v1.6 at the moment of this proposal written.
+#. Deploy the documentation to the Github Page,
+   triggered by the ``master`` branch push, tagging new release and the pull request push
+   event.
+#. Creat new tag and update the release changelog automatically.
+   This is done by a Github action named *TagBot* in Julia's community.
+
+
+Release Policy
+----------------------------------------------------------------------
+
+Since this project is still in beta stage of development and don't
+reach the v1.0, the versioning policy is that the changes of minor version number
+implies some breaking changes.
+
 
 Schedule
 ========
