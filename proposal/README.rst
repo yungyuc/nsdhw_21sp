@@ -52,3 +52,84 @@ entry too.  You can request my review in the PR for discussions.
 
 There is a template (``template.rst``) provided.  It is not a comprehensive
 guideline, but may work as a starting point for your proposal file.
+
+Directory of term projects
+==========================
+
+.. list-table:: Project list
+  :header-rows: 1
+
+  * - Author
+    - Subject
+    - Repository
+  * - `Xi-Plus <https://github.com/Xi-Plus>`__
+    - `shared-data-encrypter <Xi-Plus/README.rst>`__ (sde)
+    - `shared-data-encrypter
+      <https://github.com/Xi-Plus/shared-data-encrypter>`__
+  * - `adkevin3307 <https://github.com/adkevin3307>`__
+    - `Body IsoSurface <adkevin3307/proposal.md>`__ (bodyiso)
+    - `body_isosurface <https://github.com/adkevin3307/body_isosurface>`__
+  * - `iblis17 <https://github.com/iblis17>`__
+    - `Heterogeneously-typed and Dynamic Time Series Data Structure of
+      TimeSeries.jl <iblis17/README.rst>`__ (tsjl)
+    - `TimeSeries.jl <https://github.com/JuliaStats/TimeSeries.jl>`__
+  * - `oscar97123 <https://github.com/oscar97123>`__
+    - `Bitcoin trading bot <oscar97123/proposal.rst>`__
+    - `Bitcoin-trading-bot
+      <https://github.com/oscar97123/Bitcoin-trading-bot>`__
+  * - `q40603 <https://github.com/q40603>`__
+    - `Pairs Trading <q40603/proposal.md>`__
+    - `pair_trade_nsd <https://github.com/q40603/pairs_trade_nsd>`__
+  * - `veax-void <https://github.com/veax-void>`__
+    - `🐷 PIGS 🐷: Pixelwise Image Graph Segmentation <veax-void/README.md>`__
+    - `pigs <https://github.com/veax-void/pigs>`__
+  * - `xyhuang7215 <https://github.com/xyhuang7215>`__
+    - `SekirOgre: a game engine <xyhuang7215/proposal.rst>`__
+    - `Sekirogre <https://github.com/xyhuang7215/Sekirogre>`__
+
+Presentation time table
+=======================
+
+.. list-table:: 6/7 7:00-10:00
+  :header-rows: 1
+
+  * - ID
+    - Time
+    - Presenter name
+    - Subject
+    - Github
+  * - 1
+    - 07:00 - 07:20
+    -
+    -
+    -
+  * - 2
+    - 07:25 - 07:45
+    -
+    -
+    -
+  * - 3
+    - 07:50 - 08:10
+    -
+    -
+    -
+  * - 4
+    - 08:15 - 08:35
+    -
+    -
+    -
+  * - 5
+    - 08:40 - 09:00
+    -
+    -
+    -
+  * - 6
+    - 09:05 - 09:30
+    -
+    -
+    -
+  * - 7
+    - 09:35 - 09:55
+    -
+    -
+    -
