@@ -56,36 +56,123 @@ guideline, but may work as a starting point for your proposal file.
 Directory of term projects
 ==========================
 
+.. _Xi-Plus: https://github.com/Xi-Plus
+.. _adkevin3307: https://github.com/adkevin3307
+.. _iblis17: https://github.com/iblis17
+.. _oscar97123: https://github.com/oscar97123
+.. _q40603: https://github.com/q40603
+.. _veax-void: https://github.com/veax-void
+.. _xyhuang7215: https://github.com/xyhuang7215
+
 .. list-table:: Project list
   :header-rows: 1
 
   * - Author
-    - Subject
+    - Codename
     - Repository
-  * - `Xi-Plus <https://github.com/Xi-Plus>`__
-    - `shared-data-encrypter <Xi-Plus/README.rst>`__ (sde)
+    - Subject
+  * - Xi-Plus_
+    - sde_
     - `shared-data-encrypter
       <https://github.com/Xi-Plus/shared-data-encrypter>`__
-  * - `adkevin3307 <https://github.com/adkevin3307>`__
-    - `Body IsoSurface <adkevin3307/proposal.md>`__ (bodyiso)
+    - `Shared data encrypter <Xi-Plus/README.rst>`__
+  * - adkevin3307_
+    - bodyiso_
     - `body_isosurface <https://github.com/adkevin3307/body_isosurface>`__
-  * - `iblis17 <https://github.com/iblis17>`__
-    - `Heterogeneously-typed and Dynamic Time Series Data Structure of
-      TimeSeries.jl <iblis17/README.rst>`__ (tsjl)
+    - `Body IsoSurface <adkevin3307/proposal.md>`__
+  * - iblis17_
+    - tsjl_
     - `TimeSeries.jl <https://github.com/JuliaStats/TimeSeries.jl>`__
-  * - `oscar97123 <https://github.com/oscar97123>`__
-    - `Bitcoin trading bot <oscar97123/proposal.rst>`__
+    - `Heterogeneously-typed and Dynamic Time Series Data Structure of
+      TimeSeries.jl <iblis17/README.rst>`__
+  * - oscar97123_
+    - btb_
     - `Bitcoin-trading-bot
       <https://github.com/oscar97123/Bitcoin-trading-bot>`__
-  * - `q40603 <https://github.com/q40603>`__
-    - `Pairs Trading <q40603/proposal.md>`__
+    - `Bitcoin trading bot <oscar97123/proposal.rst>`__
+  * - q40603_
+    - ptn_
     - `pair_trade_nsd <https://github.com/q40603/pairs_trade_nsd>`__
-  * - `veax-void <https://github.com/veax-void>`__
-    - `🐷 PIGS 🐷: Pixelwise Image Graph Segmentation <veax-void/README.md>`__
+    - `Pairs Trading <q40603/proposal.md>`__
+  * - veax-void_
+    - PIGS_
     - `pigs <https://github.com/veax-void/pigs>`__
-  * - `xyhuang7215 <https://github.com/xyhuang7215>`__
-    - `SekirOgre: a game engine <xyhuang7215/proposal.rst>`__
+    - 🐷 PIGS 🐷: `Pixelwise Image Graph Segmentation <veax-void/README.md>`__
+  * - xyhuang7215_
+    - SekirOgre_
     - `Sekirogre <https://github.com/xyhuang7215/Sekirogre>`__
+    - `SekirOgre: A game engine <xyhuang7215/proposal.rst>`__
+
+sde
++++
+
+Author
+  Xi-Plus_
+Repository
+  https://github.com/Xi-Plus/shared-data-encrypter
+Subject
+  Shared data encrypter
+
+bodyiso
++++++++
+
+Author
+  adkevin3307_
+Repository
+  https://github.com/adkevin3307/body_isosurface
+Subject
+  Body isosurface
+
+tsjl
+++++
+
+Author
+  iblis17_
+Subject
+  Heterogeneously-typed and Dynamic Time Series Data Structure of
+  TimeSeries.jl
+Repository
+  https://github.com/JuliaStats/TimeSeries.jl
+
+btb
++++
+
+Author
+  oscar97123_
+Subject
+  Bitcoin trading bot
+Repository
+  https://github.com/JuliaStats/TimeSeries.jl
+
+ptn
++++
+
+Author
+  q40603_
+Subject
+  Pairs Trading
+Repository
+  https://github.com/q40603/pairs_trade_nsd
+
+PIGS
+++++
+
+Author
+  veax-void_
+Subject
+  🐷 PIGS 🐷: Pixelwise Image Graph Segmentation
+Repository
+  https://github.com/veax-void/pigs
+
+SekirOgre
++++++++++
+
+Author
+  xyhuang7215_
+Subject
+  SekirOgre: A game engine
+Repository
+  https://github.com/xyhuang7215/Sekirogre
 
 Presentation time table
 =======================
