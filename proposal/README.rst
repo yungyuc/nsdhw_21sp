@@ -70,7 +70,7 @@ Directory of term projects
   * - Author
     - Codename
     - Repository
-    - Subject
+    - Subject (with link to proposal)
   * - Xi-Plus_
     - sde_
     - `shared-data-encrypter
@@ -97,7 +97,7 @@ Directory of term projects
   * - veax-void_
     - PIGS_
     - `pigs <https://github.com/veax-void/pigs>`__
-    - 🐷 PIGS 🐷: `Pixelwise Image Graph Segmentation <veax-void/README.md>`__
+    - `🐷 PIGS 🐷: Pixelwise Image Graph Segmentation <veax-void/README.md>`__
   * - xyhuang7215_
     - SekirOgre_
     - `Sekirogre <https://github.com/xyhuang7215/Sekirogre>`__
@@ -110,8 +110,11 @@ Author
   Xi-Plus_
 Repository
   https://github.com/Xi-Plus/shared-data-encrypter
-Subject
-  Shared data encrypter
+Subject (with link to proposal)
+  `Shared data encrypter <Xi-Plus/README.rst>`__
+Summary
+  sde is an encryption library to send encrypted data to many people with
+  limited number of copies and the recipients don't share the key.
 
 bodyiso
 +++++++
@@ -120,59 +123,83 @@ Author
   adkevin3307_
 Repository
   https://github.com/adkevin3307/body_isosurface
-Subject
-  Body isosurface
+Subject (with link to proposal)
+  `Body IsoSurface <adkevin3307/proposal.md>`__
+Summary
+  Obtain the iso-surface of the intensity field of the scanning for body
+  tissue by using the algorithm of `marching cubes
+  <https://en.wikipedia.org/wiki/Marching_cubes>`__.
 
 tsjl
 ++++
 
+.. _TimeSeries.jl: https://github.com/JuliaStats/TimeSeries.jl
+
 Author
   iblis17_
-Subject
-  Heterogeneously-typed and Dynamic Time Series Data Structure of
-  TimeSeries.jl
+Subject (with link to proposal)
+  `Heterogeneously-typed and Dynamic Time Series Data Structure of
+  TimeSeries.jl <iblis17/README.rst>`__
 Repository
   https://github.com/JuliaStats/TimeSeries.jl
+Summary
+  In accordance to the Timeseries.jl_ library, make a system of table-like data
+  structures to manipulate sorted time axis with variable length time-series
+  data of heterogeneous types, and have Timeseries.jl_ to support it.
 
 btb
 +++
 
 Author
   oscar97123_
-Subject
-  Bitcoin trading bot
+Subject (with link to proposal)
+  `Bitcoin trading bot <oscar97123/proposal.rst>`__
 Repository
   https://github.com/JuliaStats/TimeSeries.jl
+Summary
+  Make a system that is capable of profiting through buying and selling
+  bitcoins.  The system needs to analyze the market activities to obtain the
+  information for the actions of trading.
 
 ptn
 +++
 
 Author
   q40603_
-Subject
-  Pairs Trading
+Subject (with link to proposal)
+  `Pairs Trading <q40603/proposal.md>`__
 Repository
   https://github.com/q40603/pairs_trade_nsd
+Summary
+  Optimize a Pairs Trading engine that aims at Taiwan Stock Market for
+  intra-day high-frequency trading.  A goal of the system is to profit in both
+  bull and bear market.
 
 PIGS
 ++++
 
 Author
   veax-void_
-Subject
-  🐷 PIGS 🐷: Pixelwise Image Graph Segmentation
+Subject (with link to proposal)
+  `🐷 PIGS 🐷: Pixelwise Image Graph Segmentation <veax-void/README.md>`__
 Repository
   https://github.com/veax-void/pigs
+Summary
+  Integrate fast C++ code to process image data using graph translation and
+  segmentation.
 
 SekirOgre
 +++++++++
 
 Author
   xyhuang7215_
-Subject
-  SekirOgre: A game engine
+Subject (with link to proposal)
+  `SekirOgre: A game engine <xyhuang7215/proposal.rst>`__
 Repository
   https://github.com/xyhuang7215/Sekirogre
+Summary
+  Make a simple game development system for people who do not have much
+  programming experiences to make action adventure games.
 
 Presentation time table
 =======================
