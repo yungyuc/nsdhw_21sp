@@ -1,30 +1,11 @@
+# Ref: https://stackoverflow.com/a/37866377/13509181
 BLAS=-I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
+MATRIX=_matrix$(shell python3-config --extension-suffix)
 
-CXX = g++
-
-ifneq ($(wildcard /opt/intel/mkl/.),)
-	INCLUDE_DIRS = /opt/intel/mkl/include
-	MKL_DIR = /opt/intel/mkl/lib/intel64
-else
-	INCLUDE_DIRS = ${HOME}/opt/conda/include
-	MKL_DIR = ${HOME}/opt/conda/lib
-endif
-
-CXXFLAGS = -O3 -Wl,--no-as-needed -shared -std=c++11 -fPIC -I$(INCLUDE_DIRS) -ldl -lpthread -lm
-CXXFLAGS += $(MKL_DIR)/libmkl_def.so
-CXXFLAGS += $(MKL_DIR)/libmkl_avx2.so
-CXXFLAGS += $(MKL_DIR)/libmkl_core.so
-CXXFLAGS += $(MKL_DIR)/libmkl_intel_lp64.so
-CXXFLAGS += $(MKL_DIR)/libmkl_sequential.so
-
-PYINCLUDE:=`python3-config --includes`
-PYIEXTERN:=-Iextern/pybind11/include
-PYSUFFIX:=`python3-config --extension-suffix`
-	
-
-.PHONY: module test clean
-_matrix: _matrix.cpp
-	$(CXX) $(CXXFLAGS) $(PYINCLUDE) $(PYIEXTERN) $< -o $@$(PYSUFFIX) $(BLAS)
+# Ref: https://pybind11.readthedocs.io/en/stable/compiling.html#building-manually
+# Ref: https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function
+$(MATRIX): _matrix.cpp
+	g++ -O3 -Wall -shared -std=c++11 -fPIC $(shell python3-config --includes) -Iextern/pybind11/include _matrix.cpp -o $(MATRIX) $(BLAS)
 
 clean:
 	rm -rf *.so __pycache__ .pytest_cache
