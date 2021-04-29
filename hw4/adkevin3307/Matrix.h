@@ -4,24 +4,28 @@
 #include <vector>
 #include <limits>
 
+struct ByteCounterImplement {
+    size_t allocated = 0;
+    size_t deallocated = 0;
+};
+
 class ByteCounter {
 private:
-    std::size_t m_allocated;
-    std::size_t m_deallocated;
+    ByteCounterImplement* m_implement;
 
 public:
     ByteCounter()
-        : m_allocated(0), m_deallocated(0)
+        : m_implement(new ByteCounterImplement)
     {
     }
 
     ByteCounter(const ByteCounter& rhs)
-        : m_allocated(rhs.m_allocated), m_deallocated(rhs.m_deallocated)
+        : m_implement(rhs.m_implement)
     {
     }
 
     ByteCounter(ByteCounter&& rhs)
-        : m_allocated(rhs.m_allocated), m_deallocated(rhs.m_deallocated)
+        : m_implement(rhs.m_implement)
     {
     }
 
@@ -32,29 +36,34 @@ public:
     ByteCounter& operator=(const ByteCounter& rhs) = delete;
     ByteCounter& operator=(ByteCounter&& rhs) = delete;
 
-    void increase(std::size_t n)
+    void increase(size_t n)
     {
-        this->m_allocated += n;
+        this->m_implement->allocated += n;
     }
 
-    void decrease(std::size_t n)
+    void decrease(size_t n)
     {
-        this->m_deallocated += n;
+        this->m_implement->deallocated += n;
     }
 
-    const std::size_t bytes() const
+    size_t bytes() const
     {
-        return (this->m_allocated - this->m_deallocated);
+        return (this->m_implement->allocated - this->m_implement->deallocated);
     }
 
-    const std::size_t allocated() const
+    size_t allocated() const
     {
-        return this->m_allocated;
+        return this->m_implement->allocated;
     }
 
-    const std::size_t deallocated() const
+    size_t deallocated() const
     {
-        return this->m_deallocated;
+        return this->m_implement->deallocated;
+    }
+
+    constexpr bool operator==(const ByteCounter& rhs) const
+    {
+        return (this->m_implement == rhs.m_implement);
     }
 };
 
@@ -64,10 +73,12 @@ private:
     ByteCounter m_counter;
 
 public:
+    using value_type = T;
+
     Allocator() = default;
 
     template<class U>
-    Allocator(const Allocator<U>& rhs)
+    Allocator(const Allocator<U>& rhs) noexcept
         : m_counter(rhs.m_counter)
     {
     }
@@ -76,13 +87,13 @@ public:
     {
     }
 
-    T* allocate(std::size_t n)
+    T* allocate(size_t n)
     {
-        if (n > std::numeric_limits<std::size_t>::max() / sizeof(T)) {
+        if (n > std::numeric_limits<size_t>::max() / sizeof(T)) {
             throw std::bad_alloc();
         }
 
-        const std::size_t bytes = n * sizeof(T);
+        const size_t bytes = n * sizeof(T);
         T* ptr = static_cast<T*>(std::malloc(bytes));
 
         if (!ptr) {
@@ -90,30 +101,76 @@ public:
         }
 
         this->m_counter.increase(bytes);
+        std::cout << "increase: " << this->m_counter.bytes() << '\n';
 
         return ptr;
     }
 
-    void deallocate(T* ptr, std::size_t n)
+    void deallocate(T* ptr, size_t n)
     {
         std::free(ptr);
 
         this->m_counter.decrease(n * sizeof(T));
     }
+
+    constexpr size_t bytes() const
+    {
+        return this->m_counter.bytes();
+    }
+
+    constexpr size_t allocated() const
+    {
+        return this->m_counter.allocated();
+    }
+
+    constexpr size_t deallocated() const
+    {
+        return this->m_counter.deallocated();
+    }
+
+    constexpr bool operator==(const Allocator<T>& rhs) const
+    {
+        return (this->m_counter == rhs.m_counter);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Allocator<T>& rhs)
+    {
+        os << "allocator: bytes = " << rhs.bytes();
+        os << " allocated = " << rhs.allocated();
+        os << " deallocated = " << rhs.deallocated();
+
+        return os;
+    }
 };
+
+Allocator<double> m_allocator;
+
+constexpr size_t bytes()
+{
+    return m_allocator.bytes();
+}
+
+constexpr size_t allocated()
+{
+    return m_allocator.allocated();
+}
+
+constexpr size_t deallocated()
+{
+    return m_allocator.deallocated();
+}
 
 template<typename T>
 class Matrix {
 private:
     size_t m_rows, m_cols;
-    Allocator<T> m_allocator;
-    std::vector<T, Allocator<T>> m_matrix;
+    std::vector<T, Allocator<double>> m_matrix = std::vector<T, Allocator<double>>(m_allocator);
 
 public:
     Matrix()
         : m_rows(0), m_cols(0)
     {
-        this->m_matrix = std::vector<T, Allocator<T>>(this->m_allocator);
+        std::cout << m_allocator << '\n';
     }
 
     Matrix(size_t rows, size_t cols)
