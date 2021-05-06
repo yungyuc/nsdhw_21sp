@@ -3,6 +3,8 @@ import os
 import pytest
 import timeit
 
+import _matrix
+
 from _matrix import Matrix, multiply_naive, multiply_mkl, multiply_tile
 
 
@@ -48,7 +50,7 @@ def test_eq():
 
 def test_bytes():
     A = Matrix(2, 4)
-    assert A.bytes() == 2 * 4 * 8
+    assert _matrix.bytes() == 2 * 4 * 8
 
     B = Matrix(4, 213)
-    assert B.bytes() == 2 * 4 * 8 + 4 * 213 * 8
+    assert _matrix.bytes() == 2 * 4 * 8 + 4 * 213 * 8

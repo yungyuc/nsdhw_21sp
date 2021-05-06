@@ -62,6 +62,9 @@ template <class T> std::size_t       Allocator42<T>::_allocated = 0;
 template <class T> std::size_t       Allocator42<T>::_deallocated = 0;
 template <class T> std::allocator<T> Allocator42<T>::_allocator = std::allocator<T>();
 
+std::size_t bytes()        { return Allocator42<double>().bytes(); }
+std::size_t allocated()    { return Allocator42<double>().allocated(); }
+std::size_t deallocated()  { return Allocator42<double>().deallocated(); }
 
 class Matrix {
 
@@ -162,10 +165,6 @@ public:
         return true;
     }
 
-    std::size_t bytes()        { return _buf.get_allocator().bytes(); }
-    std::size_t allocated()    { return _buf.get_allocator().allocated(); }
-    std::size_t deallocated()  { return _buf.get_allocator().deallocated(); }
-
 private:
     size_t _n;
     size_t _m;
@@ -259,15 +258,15 @@ PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_naive", &multiply_naive, "");
     m.def("multiply_tile",  &multiply_tile,  "");
     m.def("multiply_mkl",   &multiply_mkl,   "");
+    m.def("bytes",          &bytes,          "");
+    m.def("allocated",      &allocated,      "");
+    m.def("deallocated",    &deallocated,    "");
 
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())
         .def("n",           &Matrix::n)
         .def("m",           &Matrix::m)
         .def("data",        &Matrix::data)
-        .def("bytes",       &Matrix::bytes)
-        .def("allocated",   &Matrix::allocated)
-        .def("deallocated", &Matrix::deallocated)
         .def("from_list",   &Matrix::from_list)
         .def("__repr__",    &Matrix::repr)
         .def("__getitem__", &Matrix::getitem)
