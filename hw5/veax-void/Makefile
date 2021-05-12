@@ -27,10 +27,10 @@ CXXFLAGS := ${CXXFLAGS} \
 
 CXXGCOMPILE := -std=c++17 -O3 \
 	-I${NUMPYROOT}
-
+PYBUILD11 = $(shell python3-config --includes) -Iextern/pybind11/include
 CXX = g++
 PYBINDFLAGS := \
-	-fPIC `python3 -m pybind11 --includes`
+	-fPIC $(PYBUILD11)
 
 .PHONY: _matlink
 _matlink: matrix mod.o matrix.o
