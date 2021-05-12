@@ -90,35 +90,3 @@ Matrix multiply_mkl(Matrix &a, Matrix &b) {
 
     return res;
 }
-
-PYBIND11_MODULE(_matrix, m) {
-    m.def("multiply_naive", &multiply_naive);
-    m.def("multiply_mkl", &multiply_mkl);
-    m.def("multiply_tile", &multiply_tile);
-    m.def("bytes", &bytes);
-    m.def("allocated", &allocated);
-    m.def("deallocated", &deallocated);
-    py::class_<Matrix>(m, "Matrix", py::buffer_protocol())
-    .def(py::init<int, int>())
-    .def(py::init<vector<vector<double>>&>())
-    .def("output", &Matrix::output)
-    .def("__eq__", &Matrix::operator==)
-    .def("__setitem__", [](Matrix &m, pair<int, int> p, double v) {
-        m(p.first, p.second) = v;
-    })
-    .def("__getitem__", [](Matrix &m, pair<int, int> p) {
-        return m(p.first, p.second);
-    })
-    .def_property("nrow", &Matrix::nrow, nullptr)
-    .def_property("ncol", &Matrix::ncol, nullptr)
-    .def_buffer([](Matrix &m) -> py::buffer_info {
-        return py::buffer_info(
-            m.data(),
-            sizeof(double),
-            py::format_descriptor<double>::format(),
-            2,
-            { m.nrow(), m.ncol() },
-            { sizeof(double) * m.ncol(), sizeof(double) }
-        );
-    });
-}
