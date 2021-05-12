@@ -36,7 +36,7 @@
 #include <iostream>
 #include <type_traits>
 
-#include "matrix.hpp"
+#include "_matrix.hpp"
 
 #ifdef __GNUG__
 #  define PYTHON_WRAPPER_VISIBILITY __attribute__((visibility("hidden")))
@@ -44,7 +44,7 @@
 #  define PYTHON_WRAPPER_VISIBILITY
 #endif
 
-#include "matrix.hpp"
+#include "_matrix.hpp"
 #include <mkl.h>
 
 #define COL_MAJOR
