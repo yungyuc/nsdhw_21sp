@@ -1,54 +1,31 @@
-FLAGS ?=
+TARGET = _matrix$(shell python3-config --extension-suffix)
 
-MKLROOT ?= /opt/intel/mkl
-MKLEXT ?= a
-CXXFLAGS :=
+#MKLROOT = /opt/intel/mkl/lib/intel64
+#MKLINCLUDEROOT = /opt/intel/mkl
 
-MKLROOT ?= ${HOME}/opt/conda
-MLKBLAS = -I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
-MKLEXT ?= so
-CXXFLAGS := -Wl,--no-as-needed
+MKLROOT = ${HOME}/opt/conda/lib
+MKLINCLUDEROOT = ${HOME}/opt/conda
 
-NUMPYROOT := $(shell python -c "import numpy; print(numpy.get_include())")
+MKLLINE := \
+	-Wl,--no-as-needed \
+	-I${MKLINCLUDEROOT}/include \
+	${MKLROOT}/libmkl_intel_lp64.so \
+	${MKLROOT}/libmkl_sequential.so \
+	${MKLROOT}/libmkl_core.so \
+	${MKLROOT}/libmkl_avx2.so \
+	${MKLROOT}/libmkl_def.so \
+	-lpthread \
+	-lm \
+	-ldl
 
-MKLLINKLINE := \
-	${MKLROOT}/lib/libmkl_intel_lp64.${MKLEXT} \
-	${MKLROOT}/lib/libmkl_sequential.${MKLEXT} \
-	${MKLROOT}/lib/libmkl_core.${MKLEXT} \
-	-lpthread -lm -ldl
+PYBIND_INCLUDE := `python3 -m pybind11 --includes` -I`python3 -c "import numpy; print(numpy.get_include())"`
 
-CXX = g++
-CXXFLAGS := ${CXXFLAGS} \
-	-std=c++17 -O3 -g -m64 \
-	-shared \
-	-I${MKLROOT}/include \
-	-I${NUMPYROOT} \
-	#${MKLLINKLINE} \
-	${FLAGS}
+$(TARGET): matrix.hpp mod.cpp
+	g++ -O3 -Wall -shared -std=c++17 -fPIC $(PYBIND_INCLUDE) matrix.hpp mod.cpp -o _matrix`python3-config --extension-suffix` ${MKLLINE}
 
-CXXGCOMPILE := -std=c++17 -O3 \
-	-I${NUMPYROOT}
-PYBUILD11 = $(shell python3-config --includes) -Iextern/pybind11/include
-CXX = g++
-PYBINDFLAGS := \
-	-fPIC $(PYBUILD11)
+test: $(TARGET)
+	pytest
 
-.PHONY: _matlink
-_matlink: matrix mod.o matrix.o
-	$(CXX) -shared -o _matrix`python3-config --extension-suffix` mod.o matrix.o
-matrix: mod.cpp
-	${CXX} $< ${CXXFLAGS} $(PYBINDFLAGS) -o $@`python3-config --extension-suffix`
-
-mod.o: mod.cpp
-	$(CXX) -c $< ${CXXGCOMPILE} $(PYBINDFLAGS) -o $@ -fPIC
-
-matrix.o: _matrix.cpp _matrix.hpp Makefile
-	$(CXX) -c $< ${CXXGCOMPILE} $(MLKBLAS) -o $@ -fPIC
-
-.PHONY: clean
-clean: 
-	rm -rf matrix *.so *.o performance.txt __pycache__/ .pytest_cache/ .cache/
-
-.PHONY: test
-test: clean _matlink Makefile
-	py.test -v -l
+clean:
+	rm -rf $(TARGET) __pycache__ .pytest_cache performance.txt
+© 2021 GitHub, Inc.
