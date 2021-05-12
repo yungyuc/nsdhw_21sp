@@ -1,31 +1,32 @@
-TARGET = _matrix$(shell python3-config --extension-suffix)
+.PHONY: clean test _matrix
 
-#MKLROOT = /opt/intel/mkl/lib/intel64
-#MKLINCLUDEROOT = /opt/intel/mkl
+ifneq ("$(wildcard /opt/intel)","")
+    INCLUDE_DIRS = /opt/intel/compilers_and_libraries_2020.4.304/linux/mkl/include/	
+	MKLROOT = /opt/intel/compilers_and_libraries_2020.4.304/linux/mkl/lib/intel64_lin/
+else
+    INCLUDE_DIRS = ${HOME}/opt/conda/include	
+	MKLROOT = ${HOME}/opt/conda/lib
+endif
 
-MKLROOT = ${HOME}/opt/conda/lib
-MKLINCLUDEROOT = ${HOME}/opt/conda
-
-MKLLINE := \
-	-Wl,--no-as-needed \
-	-I${MKLINCLUDEROOT}/include \
+MKLLINKLINE := \
+	${MKLROOT}/libmkl_def.so \
 	${MKLROOT}/libmkl_intel_lp64.so \
 	${MKLROOT}/libmkl_sequential.so \
 	${MKLROOT}/libmkl_core.so \
-	${MKLROOT}/libmkl_avx2.so \
-	${MKLROOT}/libmkl_def.so \
-	-lpthread \
-	-lm \
-	-ldl
+	${MKLROOT}/libmkl_avx2.so 
 
-PYBIND_INCLUDE := `python3 -m pybind11 --includes` -I`python3 -c "import numpy; print(numpy.get_include())"`
+SOURCE = matrix.cpp mod.cpp
+BINDLIBRARY = _matrix`python3-config --extension-suffix` 
 
-$(TARGET): matrix.hpp mod.cpp
-	g++ -O3 -Wall -shared -std=c++17 -fPIC $(PYBIND_INCLUDE) matrix.hpp mod.cpp -o _matrix`python3-config --extension-suffix` ${MKLLINE}
+CXX = g++
+CXXFLAGS := -Wl,--no-as-needed -std=c++17 -O3 -g -m64 -Wall -Wextra -shared -lpthread -lm -ldl -fPIC
+PYBIND := $(shell python3-config --includes) -Iextern/pybind11/include
 
-test: $(TARGET)
-	pytest
+${BINDLIBRARY}: ${SOURCE}
+	${CXX} ${CXXFLAGS} -I${INCLUDE_DIRS} -I./ ${MKLLINKLINE} ${PYBIND} ${SOURCE} -o ${BINDLIBRARY} 
 
 clean:
-	rm -rf $(TARGET) __pycache__ .pytest_cache performance.txt
-© 2021 GitHub, Inc.
+	rm -rf *.o *.dSYM/ ${BINS} *.so .pytest_cache __pycache__/ performance.txt .cache/
+
+test: _matrix
+	python3 -m pytest -v
