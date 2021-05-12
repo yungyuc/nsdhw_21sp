@@ -1,5 +1,6 @@
 .PHONY: clean test _matrix
 
+INCLUDE_DIRS=${HOME}/opt/conda/include
 MKL_LIB_DIR=/usr/lib/x86_64-linux-gnu
 
 LD_PRELOAD := \
@@ -13,8 +14,9 @@ SOURCE = matrix.cpp mod.cpp
 BINDLIBRARY = _matrix`python3-config --extension-suffix` 
 
 CXX = g++
-CXXFLAGS := -Wl,--no-as-needed -std=c++17 -O3 -g -m64 -Wall -Wextra -shared -lpthread -lm -ldl -fPIC
+CXXFLAGS := -Wl,--no-as-needed -std=c++11 -O3 -g -m64 -Wall -Wextra -shared -lpthread -lm -ldl -fPIC
 PYBIND := $(shell python3-config --includes) -Iextern/pybind11/include
+# PYBIND := $(python3 -m pybind11 --includes)
 
 ${BINDLIBRARY}: ${SOURCE}
 	${CXX} ${CXXFLAGS} -I${INCLUDE_DIRS} -I./ ${LD_PRELOAD} ${PYBIND} ${SOURCE} -o ${BINDLIBRARY} 
