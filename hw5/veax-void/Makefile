@@ -5,6 +5,7 @@ MKLEXT ?= a
 CXXFLAGS :=
 
 MKLROOT ?= ${HOME}/opt/conda
+MLKBLAS = -I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
 MKLEXT ?= so
 CXXFLAGS := -Wl,--no-as-needed
 
@@ -42,7 +43,7 @@ mod.o: mod.cpp
 	$(CXX) -c $< ${CXXGCOMPILE} $(PYBINDFLAGS) -o $@ -fPIC
 
 matrix.o: _matrix.cpp _matrix.hpp Makefile
-	$(CXX) -c $< ${CXXGCOMPILE} -I${MKLROOT}/include -o $@ -fPIC
+	$(CXX) -c $< ${CXXGCOMPILE} $(MLKBLAS) -o $@ -fPIC
 
 .PHONY: clean
 clean: 
