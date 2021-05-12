@@ -2,7 +2,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
-#include "matrix.hpp"
+#include "_matrix.hpp"
 
 #include <mkl.h>
 
