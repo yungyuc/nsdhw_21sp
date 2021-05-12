@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "mkl.h"
+#include <mkl.h>
 
 #include "_matrix.hpp"
 
