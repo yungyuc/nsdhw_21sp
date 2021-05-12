@@ -1,100 +1,147 @@
 #pragma once
 
-#include <pybind11/stl.h>
-#include <pybind11/numpy.h>
-#include <pybind11/operators.h>
-#include <pybind11/pybind11.h>
-
-#include <mkl.h>
-#include <vector>
+#include <iostream>
 #include <iomanip>
-
-using namespace std;
-namespace py = pybind11;
+#include <vector>
+#include <stdexcept>
+#include <cstring>
 
 class Matrix {
-public:
-    Matrix() {}
-    Matrix(int row, int col);
-    Matrix(const Matrix& other);
-    Matrix(const vector<vector<double>>& other);
-    Matrix(Matrix&& other);
-    ~Matrix() {
-        matrix.reserve(0);
-    }
-    int nrow() const { return _nrow; }
-    int ncol() const { return _ncol; }
-    double *data() { return matrix.data(); }
-    double operator() (int row, int col) const { return matrix[row*_ncol + col]; }
-    double &operator() (int row, int col) { return matrix[row*_ncol + col]; }
 
-    bool operator == (const Matrix& other) {
-        if(this == &other) return true;
-        if(_nrow != other._nrow || _ncol != other._ncol) return false;
-        for(int i=0;i<_nrow;i++) {
-            for(int j=0;j<_ncol;j++) {
-                if(other(i, j) != (*this)(i, j)) {
-                    return false;
+    public:
+
+        Matrix() = default;
+
+        Matrix(size_t nrow, size_t ncol)
+        : m_nrow(nrow), m_ncol(ncol)
+        {
+            reset_buffer(nrow, ncol);
+        }
+
+        Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec)
+        : m_nrow(nrow), m_ncol(ncol)
+        {
+            reset_buffer(nrow, ncol);
+            (*this) = vec;
+        }
+
+        Matrix & operator=(std::vector<double> const & vec)
+        {
+            if (size() != vec.size())
+            {
+                throw std::out_of_range("number of elements mismatch");
+            }
+
+            size_t k = 0;
+            for (size_t i=0; i<m_nrow; ++i)
+            {
+                for (size_t j=0; j<m_ncol; ++j)
+                {
+                    (*this)(i,j) = vec[k];
+                    ++k;
+                }
+            }
+
+            return *this;
+        }
+
+        Matrix(Matrix const & other)
+        : m_nrow(other.m_nrow), m_ncol(other.m_ncol)
+        {
+            reset_buffer(other.m_nrow, other.m_ncol);
+            for (size_t i=0; i<m_nrow; ++i)
+            {
+                for (size_t j=0; j<m_ncol; ++j)
+                {
+                    (*this)(i,j) = other(i,j);
                 }
             }
         }
-        return true;
-    }
 
-    friend bool operator == (const Matrix& mat1, const Matrix& mat2);
-
-    void output() {
-        for(int i=0;i<_nrow;i++) {
-            for(int j=0;j<_ncol;j++) {
-                cout<<setprecision(10)<<matrix[i*_ncol+j]<<" ";
+        Matrix & operator=(Matrix const & other)
+        {
+            if (this == &other) { return *this; }
+            if (m_nrow != other.m_nrow || m_ncol != other.m_ncol)
+            {
+                reset_buffer(other.m_nrow, other.m_ncol);
             }
-            cout<<"\n";
-        }
-    }
-
-
-private:
-    vector<double> matrix;
-    int _nrow, _ncol;
-};
-
-bool operator == (const Matrix& mat1, const Matrix& mat2) {
-    if(&mat1 == &mat2) return true;
-    if(mat1._nrow != mat2._nrow || mat1._ncol != mat2._ncol) return false;
-    for(int i=0;i<mat1._nrow;i++) {
-        for(int j=0;j<mat1._ncol;j++) {
-            if(mat1(i, j) != mat2(i, j)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-class Tiller : Matrix {
-public:
-    Tiller(int n) : res(n, n), mat_a(n, n), mat_b(n, n), s(n) {}
-    void load(Matrix &a, int row1, int col1, Matrix &b, int row2, int col2) {
-        for(int i=0;i<s;i++) {
-            for(int j=0;j<s;j++) {
-                mat_a(i, j) = a(row1+i, col1+j);
-                mat_b(i, j) = b(row2+i, col2+j);
-            }
-        }
-    }
-    void multiply() {
-        for(int i=0;i<s;i++) {
-            for(int j=0;j<s;j++) {
-                double tmp = 0;
-                for(int k=0;k<s;k++) {
-                    tmp += mat_a(i, k) * mat_b(k, j);
+            for (size_t i=0; i<m_nrow; ++i)
+            {
+                for (size_t j=0; j<m_ncol; ++j)
+                {
+                    (*this)(i,j) = other(i,j);
                 }
-                res(i, j) = tmp;
             }
+            return *this;
         }
-    }
-    Matrix res;
-    Matrix mat_a;
-    Matrix mat_b;
-    int s;
+
+        Matrix(Matrix && other)
+        : m_nrow(other.m_nrow), m_ncol(other.m_ncol)
+        {
+            reset_buffer(0, 0);
+            std::swap(m_nrow, other.m_nrow);
+            std::swap(m_ncol, other.m_ncol);
+            std::swap(m_buffer, other.m_buffer);
+        }
+
+        Matrix & operator=(Matrix && other)
+        {
+            if (this == &other) { return *this; }
+            reset_buffer(0, 0);
+            std::swap(m_nrow, other.m_nrow);
+            std::swap(m_ncol, other.m_ncol);
+            std::swap(m_buffer, other.m_buffer);
+            return *this;
+        }
+
+        ~Matrix()
+        {
+            reset_buffer(0, 0);
+        }
+
+        double   operator() (size_t row, size_t col) const { return m_buffer[index(row, col)]; }
+        double & operator() (size_t row, size_t col)       { return m_buffer[index(row, col)]; }
+
+        static Matrix multiply_naive (const Matrix &left, const Matrix& right);
+        static Matrix multiply_tiling (const Matrix &left, const Matrix& right, int cacheline);
+        static Matrix multiply_mkl (const Matrix &left, const Matrix& right);
+
+        friend std::ostream & operator<< (std::ostream & ostr, Matrix const & mat);
+        friend Matrix operator*(Matrix const & mat1, Matrix const & mat2);
+
+        size_t nrow() const { return m_nrow; }
+        size_t ncol() const { return m_ncol; }
+
+        size_t size() const { return m_nrow * m_ncol; }
+        double buffer(size_t i) const { return m_buffer[i]; }
+        std::vector<double> buffer_vector() const { return std::vector<double>(m_buffer, m_buffer+size()); }
+
+        double * data() const { return m_buffer; }
+
+    private:
+
+        size_t index(size_t row, size_t col) const
+        {
+            #ifdef ROW_MAJOR
+                return row * m_ncol + col;
+            #else
+                return row + col * m_nrow; 
+            #endif
+        }
+
+        void reset_buffer(size_t nrow, size_t ncol)
+        {
+            if (m_buffer) { delete[] m_buffer; }
+            const size_t nelement = nrow * ncol;
+            if (nelement) { m_buffer = new double[nelement]; }
+            else          { m_buffer = nullptr; }
+            m_nrow = nrow;
+            m_ncol = ncol;
+
+            memset(m_buffer, 0, sizeof(double) * nelement);
+        }
+
+        size_t m_nrow = 0;
+        size_t m_ncol = 0;
+        double * m_buffer = nullptr;
 };
