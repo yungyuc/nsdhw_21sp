@@ -41,7 +41,7 @@ matrix: mod.cpp
 mod.o: mod.cpp
 	$(CXX) -c $< ${CXXGCOMPILE} $(PYBINDFLAGS) -o $@ -fPIC
 
-matrix.o: matrix.cpp matrix.hpp Makefile
+matrix.o: _matrix.cpp _matrix.hpp Makefile
 	$(CXX) -c $< ${CXXGCOMPILE} -I${MKLROOT}/include -o $@ -fPIC
 
 .PHONY: clean
