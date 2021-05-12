@@ -7,6 +7,7 @@
 
 #include <mkl.h>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 namespace py = pybind11;
