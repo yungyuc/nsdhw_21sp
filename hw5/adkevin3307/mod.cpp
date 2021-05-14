@@ -35,7 +35,7 @@
 #include <atomic>
 #include <iostream>
 
-#include "Matrix.h"
+#include "Matrix.hpp"
 
 #ifdef __GNUG__
 #define PYTHON_WRAPPER_VISIBILITY __attribute__((visibility("hidden")))
