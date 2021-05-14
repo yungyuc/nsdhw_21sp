@@ -1,17 +1,3 @@
-// #include <pybind11/pybind11.h>
-// #include <pybind11/operators.h>
-// #include <pybind11/numpy.h>
-// #include <mkl.h>
-
-// #include <new>
-// #include <limits>
-// #include <memory>
-// #include <string>
-// #include <vector>
-// #include <iostream>
-
-// #include "_matrix.hpp"
-
 #include <iostream>
 #include <algorithm>
 #include "mkl.h"
