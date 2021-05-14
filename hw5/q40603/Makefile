@@ -31,8 +31,8 @@ CXXFLAGS := -O3 -Wall -shared -std=c++17 \
 	-Wl,--no-as-needed \
 	-I ./ \
 	-I${NUMPY_PATH} \
-	-I${MKLROOT}/include \
-	${MKLLINKLINE}
+	# -I${MKLROOT}/include \
+	# ${MKLLINKLINE}
 
 
 .PHONY: default

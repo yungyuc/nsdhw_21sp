@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include <mkl.h>
+#include <math.h>
 
 
 bool cmpf(float A, float B, float epsilon = 0.005f)
