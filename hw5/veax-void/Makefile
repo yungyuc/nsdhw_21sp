@@ -1,3 +1,4 @@
+# By veax-void
 # Libs
 # old blas
 #BLAS=-I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
@@ -15,7 +16,7 @@ BLAS=-I /usr/include/mkl $(MKL_LIBS) -lpthread -lm -ldl
 # numpy
 NUMPYROOT=-I $(shell python -c "import numpy; print(numpy.get_include())")
 
-# pybuild11
+# pybuild11 
 PYBUILD=$(shell python3-config --includes) -Iextern/pybind11/include
 #PYBUILD=$$(python3 -m pybind11 --includes) # this one for local machine
 
@@ -26,7 +27,7 @@ MATRIX=_matrix$(shell python3-config --extension-suffix)
 
 
 $(MATRIX): ${SOURCE}
-	g++ -O3 -Wall -shared -std=c++11 -fPIC $(NUMPYROOT) $(PYBUILD) $(SOURCE) -o $(MATRIX) $(BLAS)
+	g++ -O3 -Wall -shared -std=c++17 -fPIC $(NUMPYROOT) $(PYBUILD) $(SOURCE) -o $(MATRIX) $(BLAS)
 
 test: $(MATRIX)
 	python3 -m pytest -v
