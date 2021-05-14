@@ -9,7 +9,7 @@
 class Matrix {
 private:
     size_t m_rows, m_cols;
-    std::vector<float> m_matrix;
+    std::vector<double> m_matrix;
 
 public:
     Matrix()
@@ -61,22 +61,22 @@ public:
         return *this;
     }
 
-    float const& operator()(size_t i, size_t j) const
+    double const& operator()(size_t i, size_t j) const
     {
         return this->m_matrix[i * this->m_cols +j];
     }
 
-    float& operator()(size_t i, size_t j)
+    double& operator()(size_t i, size_t j)
     {
         return this->m_matrix[i * this->m_cols + j];
     }
 
-    const float* data() const
+    const double* data() const
     {
         return &(this->m_matrix[0]);
     }
 
-    float* data()
+    double* data()
     {
         return &(this->m_matrix[0]);
     }
