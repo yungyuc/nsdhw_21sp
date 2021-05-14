@@ -26,7 +26,7 @@ MKLLINKLINE := \
 
 CXX = g++
 CXXFLAGS := -O3 -Wall -shared -std=c++17 \
-	-fPIC `python3 -m pybind11 --includes` ../mod.cpp \
+	-fPIC $(shell python3-config --includes) -Iextern/pybind11/include ../mod.cpp \
 	-o _matrix`python3-config --extension-suffix` \
 	-Wl,--no-as-needed \
 	-I ./ \
