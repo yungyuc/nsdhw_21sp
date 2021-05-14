@@ -4,8 +4,8 @@ MATRIX=_matrix$(shell python3-config --extension-suffix)
 
 # Ref: https://pybind11.readthedocs.io/en/stable/compiling.html#building-manually
 # Ref: https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function
-$(MATRIX): _matrix.cpp
-	g++ -O3 -Wall -shared -std=c++11 -fPIC $(shell python3-config --includes) -Iextern/pybind11/include _matrix.cpp -o $(MATRIX) $(BLAS)
+$(MATRIX): matrix.cpp matrix.hpp mod.cpp
+	g++ -O3 -Wall -shared -std=c++17 -fPIC $(shell python3-config --includes) -Iextern/pybind11/include matrix.cpp mod.cpp -o $(MATRIX) $(BLAS)
 
 test: $(MATRIX)
 	python3 -m pytest -v
