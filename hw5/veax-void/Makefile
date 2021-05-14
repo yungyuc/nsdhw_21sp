@@ -1,28 +1,35 @@
-.PHONY: clean test _matrix
+# Libs
+# old blas
+#BLAS=-I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
 
-INCLUDE_DIRS=${HOME}/opt/conda/include
+# new blas
 MKL_LIB_DIR=/usr/lib/x86_64-linux-gnu
+MKL_LIBS=$(MKL_LIB_DIR)/libmkl_def.so \
+    $(MKL_LIB_DIR)/libmkl_avx2.so \
+    $(MKL_LIB_DIR)/libmkl_core.so \
+    $(MKL_LIB_DIR)/libmkl_intel_lp64.so \
+    $(MKL_LIB_DIR)/libmkl_sequential.so
 
-LD_PRELOAD := \
-	${MKL_LIB_DIR}/libmkl_def.so \
-	${MKL_LIB_DIR}/libmkl_intel_lp64.so \
-	${MKL_LIB_DIR}/libmkl_sequential.so \
-	${MKL_LIB_DIR}/libmkl_core.so \
-	${MKL_LIB_DIR}/libmkl_avx2.so 
+BLAS=-I /usr/include/mkl $(MKL_LIBS) -lpthread -lm -ldl
 
-SOURCE = matrix.cpp mod.cpp
-BINDLIBRARY = _matrix`python3-config --extension-suffix` 
+# numpy
+NUMPYROOT=-I $(shell python -c "import numpy; print(numpy.get_include())")
 
-CXX = g++
-CXXFLAGS := -Wl,--no-as-needed -std=c++11 -O3 -g -m64 -Wall -Wextra -shared -lpthread -lm -ldl -fPIC
-PYBIND := $(shell python3-config --includes) -Iextern/pybind11/include
-# PYBIND := $(python3 -m pybind11 --includes)
+# pybuild11
+PYBUILD=$(shell python3-config --includes) -Iextern/pybind11/include
+#PYBUILD=$$(python3 -m pybind11 --includes) # this one for local machine
 
-${BINDLIBRARY}: ${SOURCE}
-	${CXX} ${CXXFLAGS} -I${INCLUDE_DIRS} -I./ ${LD_PRELOAD} ${PYBIND} ${SOURCE} -o ${BINDLIBRARY} 
+# In
+SOURCE = _matrix.cpp mod.cpp
+# Out
+MATRIX=_matrix$(shell python3-config --extension-suffix)
+
+
+$(MATRIX): ${SOURCE}
+	g++ -O3 -Wall -shared -std=c++11 -fPIC $(NUMPYROOT) $(PYBUILD) $(SOURCE) -o $(MATRIX) $(BLAS)
+
+test: $(MATRIX)
+	python3 -m pytest -v
 
 clean:
-	rm -rf *.o *.dSYM/ ${BINS} *.so .pytest_cache __pycache__/ performance.txt .cache/
-
-test: _matrix
-	python3 -m pytest -v
+	rm -rf __pycache__ *.so .ipynb*
