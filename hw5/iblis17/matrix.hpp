@@ -228,24 +228,3 @@ Matrix multiply_mkl(Matrix& A, Matrix& B)
 
     return C;
 }
-
-// PYBIND11_MODULE(_matrix, m) {
-//     m.def("multiply_naive", &multiply_naive, "");
-//     m.def("multiply_tile",  &multiply_tile,  "");
-//     m.def("multiply_mkl",   &multiply_mkl,   "");
-//
-//     py::class_<Matrix>(m, "Matrix")
-//         .def(py::init<size_t, size_t>())
-//         .def("n",           &Matrix::n)
-//         .def("m",           &Matrix::m)
-//         .def("data",        &Matrix::data)
-//         .def("from_list",   &Matrix::from_list)
-//         .def("__repr__",    &Matrix::repr)
-//         .def("__getitem__", &Matrix::getitem)
-//         .def("__setitem__", &Matrix::setitem)
-//         .def("__eq__",      &Matrix::eq)
-//
-//         .def_property_readonly("nrow", &Matrix::n)
-//         .def_property_readonly("ncol", &Matrix::m)
-//         ;
-// }
