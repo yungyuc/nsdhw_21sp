@@ -11,8 +11,8 @@ endif
 
 ifeq ($(UNAME_S),Linux)
 MKLROOT ?= ${HOME}/opt/conda
-#MKLROOT ?= /home/kctsai/miniconda3/envs/demo
-MKLEXT ?= so
+MKLROOT ?= /home/kctsai/miniconda3/envs/demo
+#MKLEXT ?= so
 CXXFLAGS := -Wl,--no-as-needed
 endif
 
@@ -31,8 +31,8 @@ CXXFLAGS := ${CXXFLAGS} \
 	-Wall -shared -fPIC `python3 -m pybind11 --includes` \
 	-I${NUMPY_PATH} \
 	-I ./ \
-	-I${MKLROOT}/include \
-	${MKLLINKLINE}
+	# -I${MKLROOT}/include \
+	# ${MKLLINKLINE}
 
 
 
