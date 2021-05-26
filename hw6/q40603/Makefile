@@ -1,5 +1,6 @@
 FLAGS ?=
 BLAS=-I /usr/include/mkl -L /usr/lib/x86_64-linux-gnu/mkl -lblas
+MATRIX=_matrix$(shell python3-config --extension-suffix)
 
 UNAME_S := $(shell uname -s)
 NUMPY_PATH := $(shell python3 -c "import numpy;print(numpy.get_include())")
@@ -28,7 +29,9 @@ CXX = g++
 CXXFLAGS := ${CXXFLAGS} \
 	-std=c++17 -O3 -g -m64 \
 	-ftree-vectorize -funroll-loops -ffast-math \
-	-Wall -shared -fPIC `python3 -m pybind11 --includes` \
+	-fPIC $(shell python3-config --includes) \
+	-Iextern/pybind11/include \
+	-Wall -shared \
 	-I${NUMPY_PATH} \
 	-I ./ \
 	# -I${MKLROOT}/include \
@@ -38,7 +41,7 @@ CXXFLAGS := ${CXXFLAGS} \
 
 .PHONY: default
 _matrix: matrix.hpp
-	${CXX} ./export.cpp ${CXXFLAGS} -o $@`python3-config --extension-suffix` $(BLAS)
+	${CXX} ./export.cpp ${CXXFLAGS} -o $(MATRIX) $(BLAS)
 
 .PHONY: clean
 clean:
