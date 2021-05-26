@@ -10,8 +10,8 @@ CXXFLAGS :=
 endif
 
 ifeq ($(UNAME_S),Linux)
-#MKLROOT ?= ${HOME}/opt/conda
-MKLROOT ?= /home/kctsai/miniconda3/envs/demo
+MKLROOT ?= ${HOME}/opt/conda
+#MKLROOT ?= /home/kctsai/miniconda3/envs/demo
 MKLEXT ?= so
 CXXFLAGS := -Wl,--no-as-needed
 endif
