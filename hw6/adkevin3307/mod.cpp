@@ -214,6 +214,7 @@ WrapMatrix
         (*this)
             // The Python constructor will be counted!
             .def_tagged(py::init<size_t, size_t>())
+            .def_property("array", [](Matrix &m) { return py::array_t<double>({ m.nrow(), m.ncol() }, { sizeof(double) * m.ncol(), sizeof(double) }, m.data(), py::cast(m)); }, nullptr)
             .def_property_readonly("nrow", &Matrix::nrow)
             .def_property_readonly("ncol", &Matrix::nrow)
             .def("__eq__", [](Matrix const & self, Matrix const & other) { return self == other; })
