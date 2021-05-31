@@ -1,6 +1,34 @@
-=========================
-NSD Term Project Proposal
-=========================
+================
+NSD Term Project
+================
+
+Term project
+============
+
+This course requires you to build a software package of a scientific,
+mathematic, or numerical application. Everyone needs to choose a subject
+individually, and submit the proposal of the term project no later than the end
+of the day of the 7th week, in a digital form. You are expected to discuss with
+the instructor if you are unsure about how to choose as the subject.
+
+The software package, of which the source code is publicly available, needs to
+be hosted on `github.com <https://github.com/>`__. The software needs to be
+executable on the `Ubuntu 20.04 LTS <http://releases.ubuntu.com/20.04/>`__ on
+64-bit x86 through command line. Building the software package should use a
+single command.
+
+Everyone needs to present the project to the class at the end of the course.
+The project is graded based on the following points:
+
+* Good engineering infrastructure.
+* Correct implementation and solution to the problem.
+* Adequate architecture.
+* Good presentation.
+
+Any legal subject is OK.
+
+Proposal
+========
 
 To turn in your proposal, you need **a PR** and **an E3 entry for the PR URL**.
 
@@ -53,16 +81,76 @@ entry too.  You can request my review in the PR for discussions.
 There is a template (``template.rst``) provided.  It is not a comprehensive
 guideline, but may work as a starting point for your proposal file.
 
+Presentation guideline
+======================
+
+Each presentation can use at most 25 minutes. It is suggested that the
+presentation itself uses about 20 minutes. The 5 minutes are left for questions
+and discussions. But presenters may decide how to use their time. Presenters
+are expect to prepare computers for presentation. The time for setting up the
+computer is included in the allotted presentation time.
+
+If presenters have difficulty in preparing a computer themselves, they may seek
+help from the instructor, and resolve the issue one week before their
+presentation.
+
+Grading guideline
+=================
+
+Software engineering
+++++++++++++++++++++
+
+* Build system:
+* Testing:
+* Version control:
+* History quality:
+* Issue tracking:
+* Documentation:
+* Other:
+
+Correctness
++++++++++++
+
+* Existence of golden:
+* Quality of golden:
+* Order of development:
+* Other:
+
+Software architecture
++++++++++++++++++++++
+
+* SOLID:
+* API granularity:
+* API stability:
+* Proper use of high-level language wrapping:
+* Level of modularity:
+
+  * C++ code structure:
+  * Python code structure:
+* Profiling:
+* Runtime:
+* Memory:
+* Design for testing:
+* Iterative design:
+* Other:
+
+Presentation
+++++++++++++
+
+* Technical fluency:
+* Slide clarity:
+* Time control:
+* Appearance:
+* Other:
+
 Directory of term projects
 ==========================
 
 .. _Xi-Plus: https://github.com/Xi-Plus
 .. _adkevin3307: https://github.com/adkevin3307
 .. _iblis17: https://github.com/iblis17
-.. _oscar97123: https://github.com/oscar97123
 .. _q40603: https://github.com/q40603
 .. _veax-void: https://github.com/veax-void
-.. _xyhuang7215: https://github.com/xyhuang7215
 
 .. list-table:: Project list
   :header-rows: 1
@@ -85,11 +173,6 @@ Directory of term projects
     - `TimeSeries.jl <https://github.com/JuliaStats/TimeSeries.jl>`__
     - `Heterogeneously-typed and Dynamic Time Series Data Structure of
       TimeSeries.jl <iblis17/README.rst>`__
-  * - oscar97123_
-    - btb_
-    - `Bitcoin-trading-bot
-      <https://github.com/oscar97123/Bitcoin-trading-bot>`__
-    - `Bitcoin trading bot <oscar97123/proposal.rst>`__
   * - q40603_
     - ptn_
     - `pair_trade_nsd <https://github.com/q40603/pairs_trade_nsd>`__
@@ -98,10 +181,6 @@ Directory of term projects
     - PIGS_
     - `pigs <https://github.com/veax-void/pigs>`__
     - `🐷 PIGS 🐷: Pixelwise Image Graph Segmentation <veax-void/README.md>`__
-  * - xyhuang7215_
-    - SekirOgre_
-    - `Sekirogre <https://github.com/xyhuang7215/Sekirogre>`__
-    - `SekirOgre: A game engine <xyhuang7215/proposal.rst>`__
 
 sde
 +++
@@ -147,20 +226,6 @@ Summary
   structures to manipulate sorted time axis with variable length time-series
   data of heterogeneous types, and have Timeseries.jl_ to support it.
 
-btb
-+++
-
-Author
-  oscar97123_
-Subject (with link to proposal)
-  `Bitcoin trading bot <oscar97123/proposal.rst>`__
-Repository
-  https://github.com/JuliaStats/TimeSeries.jl
-Summary
-  Make a system that is capable of profiting through buying and selling
-  bitcoins.  The system needs to analyze the market activities to obtain the
-  information for the actions of trading.
-
 ptn
 +++
 
@@ -188,6 +253,74 @@ Summary
   Integrate fast C++ code to process image data using graph translation and
   segmentation.
 
+Presentation time table
+=======================
+
+.. list-table:: 6/7 7:00-10:00
+  :header-rows: 1
+
+  * - ID
+    - Time
+    - Presenter
+    - Project
+  * - 1
+    - 07:00 - 07:25
+    -
+    -
+  * - 2
+    - 07:30 - 07:55
+    -
+    -
+  * - 3
+    - 08:00 - 08:25
+    -
+    -
+  * - 4
+    - 08:30 - 08:55
+    -
+    -
+  * - 5
+    - 09:00 - 09:25
+    -
+    -
+  * - 6
+    - 09:30 - 09:55
+    -
+    -
+
+Optional term projects
+======================
+
+.. _oscar97123: https://github.com/oscar97123
+.. _xyhuang7215: https://github.com/xyhuang7215
+
+.. list-table:: Optiona project list
+  :header-rows: 1
+
+  * - oscar97123_
+    - btb_
+    - `Bitcoin-trading-bot
+      <https://github.com/oscar97123/Bitcoin-trading-bot>`__
+    - `Bitcoin trading bot <oscar97123/proposal.rst>`__
+  * - xyhuang7215_
+    - SekirOgre_
+    - `Sekirogre <https://github.com/xyhuang7215/Sekirogre>`__
+    - `SekirOgre: A game engine <xyhuang7215/proposal.rst>`__
+
+btb
++++
+
+Author
+  oscar97123_
+Subject (with link to proposal)
+  `Bitcoin trading bot <oscar97123/proposal.rst>`__
+Repository
+  https://github.com/JuliaStats/TimeSeries.jl
+Summary
+  Make a system that is capable of profiting through buying and selling
+  bitcoins.  The system needs to analyze the market activities to obtain the
+  information for the actions of trading.
+
 SekirOgre
 +++++++++
 
@@ -200,42 +333,3 @@ Repository
 Summary
   Make a simple game development system for people who do not have much
   programming experiences to make action adventure games.
-
-Presentation time table
-=======================
-
-.. list-table:: 6/7 7:00-10:00
-  :header-rows: 1
-
-  * - ID
-    - Time
-    - Presenter
-    - Project
-  * - 1
-    - 07:00 - 07:20
-    -
-    -
-  * - 2
-    - 07:25 - 07:45
-    -
-    -
-  * - 3
-    - 07:50 - 08:10
-    -
-    -
-  * - 4
-    - 08:15 - 08:35
-    -
-    -
-  * - 5
-    - 08:40 - 09:00
-    -
-    -
-  * - 6
-    - 09:05 - 09:30
-    -
-    -
-  * - 7
-    - 09:35 - 09:55
-    -
-    -
