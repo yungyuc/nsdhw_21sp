@@ -297,6 +297,10 @@ Optional term projects
 .. list-table:: Optiona project list
   :header-rows: 1
 
+  * - Author
+    - Codename
+    - Repository
+    - Subject (with link to proposal)
   * - oscar97123_
     - btb_
     - `Bitcoin-trading-bot
