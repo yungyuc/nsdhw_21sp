@@ -269,8 +269,8 @@ Presentation time table
     -
   * - 2
     - 07:30 - 07:55
-    -
-    -
+    - q40603_
+    - `Pairs Trading <q40603/proposal.md>`__
   * - 3
     - 08:00 - 08:25
     -
