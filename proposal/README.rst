@@ -273,8 +273,8 @@ Presentation time table
     - `Pairs Trading <q40603/proposal.md>`__
   * - 3
     - 08:00 - 08:25
-    -
-    -
+    - adkevin3307_
+    - `Body IsoSurface <adkevin3307/proposal.md>`__
   * - 4
     - 08:30 - 08:55
     -
