@@ -277,8 +277,9 @@ Presentation time table
     - `Body IsoSurface <adkevin3307/proposal.md>`__
   * - 4
     - 08:30 - 08:55
-    -
-    -
+    - Xi-Plus_
+    - `shared-data-encrypter
+      <https://github.com/Xi-Plus/shared-data-encrypter>`__
   * - 5
     - 09:00 - 09:25
     -
