@@ -265,8 +265,8 @@ Presentation time table
     - Project
   * - 1
     - 07:00 - 07:25
-    -
-    -
+    - n/a
+    - n/a
   * - 2
     - 07:30 - 07:55
     - q40603_
