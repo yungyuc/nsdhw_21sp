@@ -282,8 +282,8 @@ Presentation time table
       <https://github.com/Xi-Plus/shared-data-encrypter>`__
   * - 5
     - 09:00 - 09:25
-    -
-    -
+    - veax-void_
+    - `Pixelwise image graph <https://github.com/veax-void/pigs>`__
   * - 6
     - 09:30 - 09:55
     -
