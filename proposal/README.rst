@@ -286,8 +286,9 @@ Presentation time table
     - `Pixelwise image graph <https://github.com/veax-void/pigs>`__
   * - 6
     - 09:30 - 09:55
-    -
-    -
+    - iblis17_
+    - `Heterogeneously-typed and Dynamic Time Series Data Structure of
+      TimeSeries.jl <iblis17/README.rst>`__
 
 Optional term projects
 ======================
